@@ -7,6 +7,12 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+# Permissions needed for deploying to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   test-and-report:
     timeout-minutes: 60
@@ -53,3 +59,25 @@ jobs:
         with:
           name: qa-pictorial-report
           path: reports/
+
+      - name: Setup Pages
+        if: always()
+        uses: actions/configure-pages@v4
+
+      - name: Upload Pages Artifact
+        if: always()
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: reports/
+
+  deploy:
+    if: always()
+    needs: test-and-report
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
