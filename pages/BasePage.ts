@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { Page, ConsoleMessage, Request } from '@playwright/test';
 import { IPage } from '../interfaces/IPage';
 
 /**
@@ -90,7 +90,7 @@ export abstract class BasePage implements IPage {
    * Retrieves all console messages (logs, warnings, errors) emitted by the page
    * during this test execution.
    */
-  async getConsoleMessages() {
+  async getConsoleMessages(): Promise<ConsoleMessage[]> {
     return this.page.consoleMessages();
   }
 
@@ -98,7 +98,7 @@ export abstract class BasePage implements IPage {
    * Retrieves all uncaught exceptions/errors thrown within the page context
    * during this test execution.
    */
-  async getPageErrors() {
+  async getPageErrors(): Promise<Error[]> {
     return this.page.pageErrors();
   }
 
@@ -106,7 +106,7 @@ export abstract class BasePage implements IPage {
    * Retrieves all network requests made by the page during this test execution.
    * Useful for asserting API calls were made correctly.
    */
-  async getNetworkRequests() {
+  async getNetworkRequests(): Promise<Request[]> {
     return this.page.requests();
   }
 }
