@@ -1,0 +1,2360 @@
+========================================================================================================================
+PARABANK TEST CASES - COMPLETE TEST SUITE
+Website: https://parabank.parasoft.com
+========================================================================================================================
+
+
+========================================================================================================================
+  MODULE: 1.Registration
+========================================================================================================================
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_001
+  Module              : Registration
+  Test Case Title     : Successful registration with all valid data
+  Pre-conditions      : User not registered; navigate to /register.htm
+  Test Steps          : 1. Fill all fields with valid data
+                      2. Click Register
+  Test Data           : First:John Last:Doe Addr:123 Main St City:NYC State:NY Zip:10001 Phone:5551234567 SSN:123-45-6789 User:johndoe01 Pass:Pass@1234 Confirm:Pass@1234
+  Expected Result     : Registration successful; redirected to accounts overview with welcome message
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_002
+  Module              : Registration
+  Test Case Title     : Registration with minimum valid field lengths
+  Pre-conditions      : On register page
+  Test Steps          : 1. Enter minimum valid data in each field
+                      2. Click Register
+  Test Data           : First:Jo Last:Do Addr:1 A City:NY State:NY Zip:10001 SSN:000-00-0001 User:ab Pass:Ab@1 Confirm:Ab@1
+  Expected Result     : Registration succeeds with minimum-length valid inputs
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_003
+  Module              : Registration
+  Test Case Title     : Register with special characters in address
+  Pre-conditions      : On register page
+  Test Steps          : 1. Enter address with #, - characters
+                      2. Complete all fields
+                      3. Register
+  Test Data           : Addr: 45-B Elm #4, City:Miami
+  Expected Result     : Registration succeeds; address stored correctly
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_004
+  Module              : Registration
+  Test Case Title     : Verify password is masked in both password fields
+  Pre-conditions      : On register page
+  Test Steps          : 1. Type in Password field
+                      2. Type in Confirm Password field
+  Test Data           : Any password string
+  Expected Result     : Both password fields display dots/asterisks (masked input)
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_005
+  Module              : Registration
+  Test Case Title     : Register with numeric phone number (10 digits)
+  Pre-conditions      : On register page
+  Test Steps          : 1. Fill all fields; use 10-digit phone
+                      2. Register
+  Test Data           : Phone: 9876543210
+  Expected Result     : Registration succeeds
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_006
+  Module              : Registration
+  Test Case Title     : Verify all required fields have asterisk indicator
+  Pre-conditions      : On register page
+  Test Steps          : 1. Observe field labels
+  Test Data           : N/A
+  Expected Result     : All mandatory fields marked with asterisk (*) or visual indicator
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Low
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_007
+  Module              : Registration
+  Test Case Title     : Username is case-sensitive – register & login with exact case
+  Pre-conditions      : On register page
+  Test Steps          : 1. Register username 'TestUser'
+                      2. Log in with 'TestUser'
+  Test Data           : User: TestUser
+  Expected Result     : Login succeeds only with 'TestUser'; 'testuser' fails
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_008
+  Module              : Registration
+  Test Case Title     : Register and verify data persists in profile
+  Pre-conditions      : Complete registration
+  Test Steps          : 1. Register
+                      2. Login
+                      3. Go to Update Contact Info
+  Test Data           : Valid full profile data
+  Expected Result     : All submitted data visible and correct in profile
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_009
+  Module              : Registration
+  Test Case Title     : Register using long valid first and last name (50 chars each)
+  Pre-conditions      : On register page
+  Test Steps          : 1. Enter 50-char first and last name
+                      2. Register
+  Test Data           : First: 'Alexandraaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+  Expected Result     : Registration succeeds or shows max-length hint
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Low
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_010
+  Module              : Registration
+  Test Case Title     : Password containing uppercase, lowercase, digit, special char
+  Pre-conditions      : On register page
+  Test Steps          : 1. Enter Password: P@ssw0rd!
+                      2. Confirm same
+                      3. Register
+  Test Data           : Pass: P@ssw0rd!
+  Expected Result     : Registration succeeds; strong password accepted
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_011
+  Module              : Registration
+  Test Case Title     : Submit empty form – all fields blank
+  Pre-conditions      : On register page
+  Test Steps          : 1. Click Register without filling any field
+  Test Data           : All fields empty
+  Expected Result     : Validation errors shown for all required fields; form not submitted
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_012
+  Module              : Registration
+  Test Case Title     : Leave First Name blank
+  Pre-conditions      : On register page
+  Test Steps          : 1. Fill all fields except First Name
+                      2. Click Register
+  Test Data           : First Name: (empty)
+  Expected Result     : Error: 'First name is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_013
+  Module              : Registration
+  Test Case Title     : Leave Last Name blank
+  Pre-conditions      : On register page
+  Test Steps          : 1. Fill all fields except Last Name
+                      2. Click Register
+  Test Data           : Last Name: (empty)
+  Expected Result     : Error: 'Last name is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_014
+  Module              : Registration
+  Test Case Title     : Leave Address blank
+  Pre-conditions      : On register page
+  Test Steps          : 1. Fill all except Address
+                      2. Click Register
+  Test Data           : Address: (empty)
+  Expected Result     : Error: 'Address is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_015
+  Module              : Registration
+  Test Case Title     : Leave City blank
+  Pre-conditions      : On register page
+  Test Steps          : 1. Fill all except City
+                      2. Click Register
+  Test Data           : City: (empty)
+  Expected Result     : Error: 'City is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Medium
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_016
+  Module              : Registration
+  Test Case Title     : Leave State blank
+  Pre-conditions      : On register page
+  Test Steps          : 1. Fill all except State
+                      2. Register
+  Test Data           : State: (empty)
+  Expected Result     : Error: 'State is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Medium
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_017
+  Module              : Registration
+  Test Case Title     : Leave Zip Code blank
+  Pre-conditions      : On register page
+  Test Steps          : 1. Fill all except Zip
+                      2. Register
+  Test Data           : Zip: (empty)
+  Expected Result     : Error: 'Zip Code is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Medium
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_018
+  Module              : Registration
+  Test Case Title     : Leave Phone blank
+  Pre-conditions      : On register page
+  Test Steps          : 1. Fill all except Phone
+                      2. Register
+  Test Data           : Phone: (empty)
+  Expected Result     : Error or registration allowed (document app behaviour)
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Low
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_019
+  Module              : Registration
+  Test Case Title     : Leave SSN blank
+  Pre-conditions      : On register page
+  Test Steps          : 1. Fill all except SSN
+                      2. Register
+  Test Data           : SSN: (empty)
+  Expected Result     : Error: 'SSN is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_020
+  Module              : Registration
+  Test Case Title     : Leave Username blank
+  Pre-conditions      : On register page
+  Test Steps          : 1. Fill all except Username
+                      2. Register
+  Test Data           : Username: (empty)
+  Expected Result     : Error: 'Username is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_021
+  Module              : Registration
+  Test Case Title     : Leave Password blank
+  Pre-conditions      : On register page
+  Test Steps          : 1. Fill all except Password
+                      2. Register
+  Test Data           : Password: (empty)
+  Expected Result     : Error: 'Password is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_022
+  Module              : Registration
+  Test Case Title     : Password and Confirm Password mismatch
+  Pre-conditions      : On register page
+  Test Steps          : 1. Enter Password: Pass@1
+                      2. Confirm: Pass@2
+                      3. Register
+  Test Data           : Pass: Pass@1  Confirm: Pass@2
+  Expected Result     : Error: 'Passwords did not match'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_023
+  Module              : Registration
+  Test Case Title     : Register with already existing username
+  Pre-conditions      : User 'johndoe01' already registered
+  Test Steps          : 1. Try to register again with same username
+                      2. Register
+  Test Data           : User: johndoe01
+  Expected Result     : Error: 'This username already exists.'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_024
+  Module              : Registration
+  Test Case Title     : Enter SQL injection in First Name field
+  Pre-conditions      : On register page
+  Test Steps          : 1. First Name: ' OR '1'='1
+                      2. Register
+  Test Data           : First: ' OR '1'='1
+  Expected Result     : Application rejects or sanitizes; no DB error exposed
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Critical
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_025
+  Module              : Registration
+  Test Case Title     : Enter XSS script in address field
+  Pre-conditions      : On register page
+  Test Steps          : 1. Address: <script>alert('xss')</script>
+                      2. Register
+  Test Data           : Addr: <script>alert('xss')</script>
+  Expected Result     : Script not executed; input sanitized or rejected
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Critical
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_026
+  Module              : Registration
+  Test Case Title     : Enter invalid zip code (letters)
+  Pre-conditions      : On register page
+  Test Steps          : 1. Zip: ABCDE
+                      2. Register
+  Test Data           : Zip: ABCDE
+  Expected Result     : Error or system accepts alphanumeric – document behaviour
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Medium
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_027
+  Module              : Registration
+  Test Case Title     : Very long username (>50 chars)
+  Pre-conditions      : On register page
+  Test Steps          : 1. Enter 60-char username
+                      2. Register
+  Test Data           : User: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+  Expected Result     : Error shown or input truncated to max length
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Medium
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : REG_028
+  Module              : Registration
+  Test Case Title     : Username with spaces
+  Pre-conditions      : On register page
+  Test Steps          : 1. Username: john doe
+                      2. Register
+  Test Data           : User: 'john doe'
+  Expected Result     : Error: spaces not allowed in username, or form rejects
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Medium
+  Type                : Negative
+
+
+========================================================================================================================
+  MODULE: 2.Login
+========================================================================================================================
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_001
+  Module              : Login
+  Test Case Title     : Successful login with valid credentials
+  Pre-conditions      : Registered user exists
+  Test Steps          : 1. Enter valid username & password
+                      2. Click Log In
+  Test Data           : User: john  Pass: demo
+  Expected Result     : User logged in; redirected to Account Overview page
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_002
+  Module              : Login
+  Test Case Title     : Login with 'Remember Me' checkbox (if present)
+  Pre-conditions      : Registered user
+  Test Steps          : 1. Check Remember Me
+                      2. Login
+                      3. Close browser & reopen
+  Test Data           : User: john  Pass: demo
+  Expected Result     : Session persists or username pre-filled on next visit
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_003
+  Module              : Login
+  Test Case Title     : Login and verify welcome message contains username
+  Pre-conditions      : Registered user
+  Test Steps          : 1. Login
+                      2. Check header/welcome area
+  Test Data           : User: john
+  Expected Result     : Page shows 'Welcome john' or similar personalised message
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_004
+  Module              : Login
+  Test Case Title     : Login then use Logout and verify session ended
+  Pre-conditions      : User is logged in
+  Test Steps          : 1. Click Log Out
+                      2. Try to navigate to /overview.htm
+  Test Data           : N/A
+  Expected Result     : Redirected back to login page; session cookie cleared
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_005
+  Module              : Login
+  Test Case Title     : Login from Forgot Login Info page after recovery
+  Pre-conditions      : User completed password lookup
+  Test Steps          : 1. Complete forgot-login flow
+                      2. Use retrieved credentials to login
+  Test Data           : Correct SSN & name used in lookup
+  Expected Result     : Login succeeds with retrieved credentials
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_006
+  Module              : Login
+  Test Case Title     : Verify password field is masked
+  Pre-conditions      : On login page
+  Test Steps          : 1. Type in password field
+                      2. Observe characters
+  Test Data           : Any string
+  Expected Result     : Characters displayed as dots/asterisks
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_007
+  Module              : Login
+  Test Case Title     : Login page accessible without authentication
+  Pre-conditions      : None
+  Test Steps          : 1. Navigate to /index.htm without logging in
+  Test Data           : N/A
+  Expected Result     : Login page displayed correctly; no redirect loop
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Low
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_008
+  Module              : Login
+  Test Case Title     : Successful login with mixed-case username (case-sensitive check)
+  Pre-conditions      : Username registered as 'JohnDoe'
+  Test Steps          : 1. Login with 'johndoe' (wrong case)
+  Test Data           : User: johndoe  Pass: correct
+  Expected Result     : Login fails if case-sensitive; document behaviour
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_009
+  Module              : Login
+  Test Case Title     : Login with blank username and password
+  Pre-conditions      : On login page
+  Test Steps          : 1. Leave both fields empty
+                      2. Click Log In
+  Test Data           : User: (empty)  Pass: (empty)
+  Expected Result     : Error message displayed; login rejected
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_010
+  Module              : Login
+  Test Case Title     : Login with blank username only
+  Pre-conditions      : On login page
+  Test Steps          : 1. Leave username blank
+                      2. Enter valid password
+                      3. Log In
+  Test Data           : User: (empty)  Pass: demo
+  Expected Result     : Error: username required; login rejected
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_011
+  Module              : Login
+  Test Case Title     : Login with blank password only
+  Pre-conditions      : On login page
+  Test Steps          : 1. Enter valid username
+                      2. Leave password blank
+                      3. Log In
+  Test Data           : User: john  Pass: (empty)
+  Expected Result     : Error: password required; login rejected
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_012
+  Module              : Login
+  Test Case Title     : Login with incorrect password
+  Pre-conditions      : Registered user exists
+  Test Steps          : 1. Enter valid username
+                      2. Enter wrong password
+                      3. Log In
+  Test Data           : User: john  Pass: wrongpass
+  Expected Result     : Error: 'The username and password could not be verified.'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_013
+  Module              : Login
+  Test Case Title     : Login with non-existent username
+  Pre-conditions      : On login page
+  Test Steps          : 1. Enter username that doesn't exist
+                      2. Log In
+  Test Data           : User: ghost999  Pass: anypass
+  Expected Result     : Error: 'The username and password could not be verified.'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_014
+  Module              : Login
+  Test Case Title     : Login with correct username but completely wrong password
+  Pre-conditions      : Registered user
+  Test Steps          : 1. Enter valid user
+                      2. Enter totally random password
+  Test Data           : User: john  Pass: !!!RANDOM!!!
+  Expected Result     : Login fails with appropriate error message
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_015
+  Module              : Login
+  Test Case Title     : SQL injection in username field
+  Pre-conditions      : On login page
+  Test Steps          : 1. Username: admin'--
+                      2. Password: anything
+                      3. Log In
+  Test Data           : User: admin'--  Pass: x
+  Expected Result     : Login rejected; no SQL error exposed; application secure
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Critical
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_016
+  Module              : Login
+  Test Case Title     : SQL injection in password field
+  Pre-conditions      : On login page
+  Test Steps          : 1. Username: john
+                      2. Password: ' OR '1'='1
+  Test Data           : User: john  Pass: ' OR '1'='1
+  Expected Result     : Login rejected; application not bypassed
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Critical
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_017
+  Module              : Login
+  Test Case Title     : XSS in username field
+  Pre-conditions      : On login page
+  Test Steps          : 1. Username: <script>alert(1)</script>
+                      2. Log In
+  Test Data           : User: <script>alert(1)</script>
+  Expected Result     : Script not executed; input sanitised or login rejected
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Critical
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_018
+  Module              : Login
+  Test Case Title     : Direct URL access to protected page without login
+  Pre-conditions      : Not logged in
+  Test Steps          : 1. Navigate directly to /parabank/overview.htm
+  Test Data           : N/A
+  Expected Result     : Redirected to login page; protected resource not accessible
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_019
+  Module              : Login
+  Test Case Title     : Session timeout – access page after long inactivity
+  Pre-conditions      : User logged in
+  Test Steps          : 1. Log in
+                      2. Wait for session timeout
+                      3. Try to navigate
+  Test Data           : N/A
+  Expected Result     : Session expired; user redirected to login
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_020
+  Module              : Login
+  Test Case Title     : Login with spaces in username
+  Pre-conditions      : On login page
+  Test Steps          : 1. Username: 'john doe'
+                      2. Password: demo
+  Test Data           : User: 'john doe'
+  Expected Result     : Login fails if spaces not allowed in username
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Medium
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_021
+  Module              : Login
+  Test Case Title     : Login with very long username (500 chars)
+  Pre-conditions      : On login page
+  Test Steps          : 1. Enter 500-char string as username
+                      2. Log In
+  Test Data           : User: 500-char string
+  Expected Result     : Error or truncation; no server crash
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Medium
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOG_022
+  Module              : Login
+  Test Case Title     : Verify back-button after logout doesn't restore session
+  Pre-conditions      : User just logged out
+  Test Steps          : 1. Log out
+                      2. Press browser back button
+  Test Data           : N/A
+  Expected Result     : Cached/protected page not accessible; redirected to login
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+
+========================================================================================================================
+  MODULE: 3.ForgotLogin
+========================================================================================================================
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : FP_001
+  Module              : Forgot Login
+  Test Case Title     : Retrieve login info with all correct details
+  Pre-conditions      : Registered user with known details
+  Test Steps          : 1. Click 'Forgot login info?'
+                      2. Enter matching name, address, SSN
+                      3. Submit
+  Test Data           : First:John Last:Doe Addr:123 Main SSN:123-45-6789
+  Expected Result     : Username & password displayed or reset email sent
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : FP_002
+  Module              : Forgot Login
+  Test Case Title     : Verify lookup page is accessible without login
+  Pre-conditions      : Not logged in
+  Test Steps          : 1. Navigate to /lookup.htm
+  Test Data           : N/A
+  Expected Result     : Page loads correctly
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Low
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : FP_003
+  Module              : Forgot Login
+  Test Case Title     : Verify page title and field labels
+  Pre-conditions      : On lookup page
+  Test Steps          : 1. Observe page elements
+  Test Data           : N/A
+  Expected Result     : Fields: First Name, Last Name, Address, City, State, Zip, SSN present
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Low
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : FP_004
+  Module              : Forgot Login
+  Test Case Title     : Use retrieved credentials to successfully login
+  Pre-conditions      : Credentials retrieved via lookup
+  Test Steps          : 1. Use returned username/password on login page
+  Test Data           : Returned credentials
+  Expected Result     : Login succeeds
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : FP_005
+  Module              : Forgot Login
+  Test Case Title     : Submit lookup with all fields blank
+  Pre-conditions      : On lookup page
+  Test Steps          : 1. Click Find My Login Info without filling any field
+  Test Data           : All empty
+  Expected Result     : Validation errors displayed for required fields
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : FP_006
+  Module              : Forgot Login
+  Test Case Title     : Lookup with wrong SSN
+  Pre-conditions      : On lookup page
+  Test Steps          : 1. Enter correct name & address but wrong SSN
+                      2. Submit
+  Test Data           : SSN: 999-99-9999 (wrong)
+  Expected Result     : Error: 'The customer information provided could not be found.'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : FP_007
+  Module              : Forgot Login
+  Test Case Title     : Lookup with wrong Last Name
+  Pre-conditions      : On lookup page
+  Test Steps          : 1. Enter wrong last name but correct other details
+  Test Data           : Last: WrongName
+  Expected Result     : Lookup fails; error message displayed
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : FP_008
+  Module              : Forgot Login
+  Test Case Title     : Lookup with wrong Address
+  Pre-conditions      : On lookup page
+  Test Steps          : 1. Enter wrong address
+  Test Data           : Addr: 999 Fake St
+  Expected Result     : Lookup fails; error message displayed
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Medium
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : FP_009
+  Module              : Forgot Login
+  Test Case Title     : Leave SSN blank
+  Pre-conditions      : On lookup page
+  Test Steps          : 1. Fill all except SSN
+                      2. Submit
+  Test Data           : SSN: (empty)
+  Expected Result     : Error: 'SSN is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : FP_010
+  Module              : Forgot Login
+  Test Case Title     : Leave First Name blank
+  Pre-conditions      : On lookup page
+  Test Steps          : 1. Fill all except First Name
+                      2. Submit
+  Test Data           : First: (empty)
+  Expected Result     : Error: 'First name is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : FP_011
+  Module              : Forgot Login
+  Test Case Title     : SQL injection in SSN field
+  Pre-conditions      : On lookup page
+  Test Steps          : 1. SSN: ' OR 1=1--
+                      2. Submit
+  Test Data           : SSN: ' OR 1=1--
+  Expected Result     : Lookup rejected; no data leak or SQL error
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Critical
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : FP_012
+  Module              : Forgot Login
+  Test Case Title     : Non-existent user details
+  Pre-conditions      : On lookup page
+  Test Steps          : 1. Enter completely fabricated user details
+                      2. Submit
+  Test Data           : All fake data
+  Expected Result     : Error: 'The customer information provided could not be found.'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+
+========================================================================================================================
+  MODULE: 4.OpenAccount
+========================================================================================================================
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACC_001
+  Module              : Open Account
+  Test Case Title     : Open a new Checking account successfully
+  Pre-conditions      : User logged in; existing account available
+  Test Steps          : 1. Click 'Open New Account'
+                      2. Select Checking
+                      3. Choose existing account
+                      4. Submit
+  Test Data           : Type: Checking
+  Expected Result     : New account created; account number displayed
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACC_002
+  Module              : Open Account
+  Test Case Title     : Open a new Savings account successfully
+  Pre-conditions      : User logged in
+  Test Steps          : 1. Click 'Open New Account'
+                      2. Select Savings
+                      3. Submit
+  Test Data           : Type: Savings
+  Expected Result     : New Savings account created with account number
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACC_003
+  Module              : Open Account
+  Test Case Title     : Verify new account appears in Account Overview
+  Pre-conditions      : New account just created
+  Test Steps          : 1. Navigate to Account Overview after creation
+  Test Data           : N/A
+  Expected Result     : New account listed in overview with $0 or minimum balance
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACC_004
+  Module              : Open Account
+  Test Case Title     : Open account and verify account number is unique
+  Pre-conditions      : Two accounts opened
+  Test Steps          : 1. Open two accounts
+                      2. Compare account numbers
+  Test Data           : N/A
+  Expected Result     : Each account has a unique account number
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACC_005
+  Module              : Open Account
+  Test Case Title     : Open account link only visible after login
+  Pre-conditions      : Not logged in
+  Test Steps          : 1. Check sidebar without logging in
+  Test Data           : N/A
+  Expected Result     : 'Open New Account' link not visible or redirects to login
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACC_006
+  Module              : Open Account
+  Test Case Title     : Verify both account type options available in dropdown
+  Pre-conditions      : On Open New Account page
+  Test Steps          : 1. Observe account type dropdown
+  Test Data           : N/A
+  Expected Result     : Dropdown contains 'CHECKING' and 'SAVINGS'
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Low
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACC_007
+  Module              : Open Account
+  Test Case Title     : Access Open Account page without login
+  Pre-conditions      : Not logged in
+  Test Steps          : 1. Navigate to /openaccount.htm directly
+  Test Data           : N/A
+  Expected Result     : Redirected to login page
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACC_008
+  Module              : Open Account
+  Test Case Title     : Submit without selecting account type
+  Pre-conditions      : On Open New Account page
+  Test Steps          : 1. Don't select type
+                      2. Click Open New Account
+  Test Data           : No type selected
+  Expected Result     : Error or default type used; document behaviour
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Medium
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACC_009
+  Module              : Open Account
+  Test Case Title     : Submit without selecting 'from' account
+  Pre-conditions      : User has multiple accounts
+  Test Steps          : 1. Don't select from account
+                      2. Submit
+  Test Data           : From account: not selected
+  Expected Result     : Error displayed or form prevents submission
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Medium
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACC_010
+  Module              : Open Account
+  Test Case Title     : Verify insufficient funds message if minimum deposit not met
+  Pre-conditions      : Account balance < minimum
+  Test Steps          : 1. Attempt to open account with insufficient funds
+  Test Data           : Balance: $0
+  Expected Result     : Error: insufficient funds or minimum deposit required
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACC_011
+  Module              : Open Account
+  Test Case Title     : Verify page requires auth after session expires
+  Pre-conditions      : User was logged in; session expired
+  Test Steps          : 1. Wait for session timeout
+                      2. Try to open account
+  Test Data           : N/A
+  Expected Result     : Redirected to login
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACC_012
+  Module              : Open Account
+  Test Case Title     : Verify URL manipulation doesn't bypass auth
+  Pre-conditions      : Not logged in
+  Test Steps          : 1. Manually navigate to open account URL
+  Test Data           : N/A
+  Expected Result     : Login required; redirect occurs
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACC_013
+  Module              : Open Account
+  Test Case Title     : Check for duplicate account creation on double-click
+  Pre-conditions      : On Open New Account page
+  Test Steps          : 1. Click Open New Account twice rapidly
+  Test Data           : N/A
+  Expected Result     : Only one account created; no duplicate
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Medium
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACC_014
+  Module              : Open Account
+  Test Case Title     : Verify error message is user-friendly (no stack trace)
+  Pre-conditions      : Simulate error condition
+  Test Steps          : 1. Trigger an error scenario
+                      2. Observe error message
+  Test Data           : N/A
+  Expected Result     : Friendly error message shown; no server stack trace exposed
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+
+========================================================================================================================
+  MODULE: 5.TransferFunds
+========================================================================================================================
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : TRF_001
+  Module              : Transfer Funds
+  Test Case Title     : Transfer valid amount between two accounts
+  Pre-conditions      : Logged in; 2+ accounts with sufficient balance
+  Test Steps          : 1. Click Transfer Funds
+                      2. Enter amount
+                      3. Select From & To accounts
+                      4. Transfer
+  Test Data           : Amount: $100  From: Acc1  To: Acc2
+  Expected Result     : Transfer successful; confirmation message; balances updated
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : TRF_002
+  Module              : Transfer Funds
+  Test Case Title     : Transfer minimum amount ($0.01)
+  Pre-conditions      : Logged in; sufficient balance
+  Test Steps          : 1. Transfer $0.01
+  Test Data           : Amount: 0.01
+  Expected Result     : Transfer succeeds; confirmation shown
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : TRF_003
+  Module              : Transfer Funds
+  Test Case Title     : Transfer entire account balance
+  Pre-conditions      : Logged in
+  Test Steps          : 1. Transfer full balance
+  Test Data           : Amount: full balance
+  Expected Result     : Transfer succeeds; source account shows $0
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : TRF_004
+  Module              : Transfer Funds
+  Test Case Title     : Verify balance updated correctly after transfer
+  Pre-conditions      : After successful transfer
+  Test Steps          : 1. Check both account balances after transfer
+  Test Data           : Transfer: $50
+  Expected Result     : Source reduced by $50; destination increased by $50
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : TRF_005
+  Module              : Transfer Funds
+  Test Case Title     : Verify transfer confirmation page details are correct
+  Pre-conditions      : Transfer submitted
+  Test Steps          : 1. Observe confirmation page
+  Test Data           : N/A
+  Expected Result     : Amount, from/to accounts, date shown correctly
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : TRF_006
+  Module              : Transfer Funds
+  Test Case Title     : Transfer with decimal amount (cents)
+  Pre-conditions      : Logged in
+  Test Steps          : 1. Transfer $25.75
+  Test Data           : Amount: 25.75
+  Expected Result     : Transfer succeeds; amount stored/displayed correctly with 2 decimal places
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : TRF_007
+  Module              : Transfer Funds
+  Test Case Title     : Transfer between savings and checking
+  Pre-conditions      : Both account types exist
+  Test Steps          : 1. From Savings → Checking
+                      2. Transfer
+  Test Data           : Amount: $200
+  Expected Result     : Cross-type transfer succeeds
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : TRF_008
+  Module              : Transfer Funds
+  Test Case Title     : Transfer amount exceeding balance
+  Pre-conditions      : Logged in; balance $100
+  Test Steps          : 1. Enter amount $500
+                      2. Transfer
+  Test Data           : Amount: 500  Balance: 100
+  Expected Result     : Error: 'Insufficient funds'; transfer rejected
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : TRF_009
+  Module              : Transfer Funds
+  Test Case Title     : Transfer $0 amount
+  Pre-conditions      : Logged in
+  Test Steps          : 1. Enter 0
+                      2. Transfer
+  Test Data           : Amount: 0
+  Expected Result     : Error: amount must be greater than zero
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : TRF_010
+  Module              : Transfer Funds
+  Test Case Title     : Transfer negative amount
+  Pre-conditions      : Logged in
+  Test Steps          : 1. Enter -50
+                      2. Transfer
+  Test Data           : Amount: -50
+  Expected Result     : Error: invalid amount; negative not allowed
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : TRF_011
+  Module              : Transfer Funds
+  Test Case Title     : Leave amount field blank
+  Pre-conditions      : Logged in
+  Test Steps          : 1. Leave amount empty
+                      2. Transfer
+  Test Data           : Amount: (empty)
+  Expected Result     : Error: 'Amount is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : TRF_012
+  Module              : Transfer Funds
+  Test Case Title     : Enter alphabetic characters in amount
+  Pre-conditions      : Logged in
+  Test Steps          : 1. Amount: 'abc'
+                      2. Transfer
+  Test Data           : Amount: abc
+  Expected Result     : Error: invalid amount; numeric required
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : TRF_013
+  Module              : Transfer Funds
+  Test Case Title     : Transfer to same account (From = To)
+  Pre-conditions      : Logged in
+  Test Steps          : 1. Select same account for From and To
+                      2. Transfer
+  Test Data           : From: Acc1  To: Acc1
+  Expected Result     : Error: cannot transfer to same account
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Medium
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : TRF_014
+  Module              : Transfer Funds
+  Test Case Title     : Access Transfer Funds page without login
+  Pre-conditions      : Not logged in
+  Test Steps          : 1. Navigate directly to /transfer.htm
+  Test Data           : N/A
+  Expected Result     : Redirected to login page
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : TRF_015
+  Module              : Transfer Funds
+  Test Case Title     : Enter very large amount
+  Pre-conditions      : Logged in
+  Test Steps          : 1. Amount: 999999999999
+                      2. Transfer
+  Test Data           : Amount: 999999999999
+  Expected Result     : Error: exceeds balance or max allowed amount
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Medium
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : TRF_016
+  Module              : Transfer Funds
+  Test Case Title     : Special characters in amount field
+  Pre-conditions      : Logged in
+  Test Steps          : 1. Amount: $@#!
+                      2. Transfer
+  Test Data           : Amount: $@#!
+  Expected Result     : Error: invalid input; non-numeric rejected
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+
+========================================================================================================================
+  MODULE: 6.BillPay
+========================================================================================================================
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : BILL_001
+  Module              : Bill Pay
+  Test Case Title     : Pay bill with all valid payee information
+  Pre-conditions      : Logged in; account with sufficient balance
+  Test Steps          : 1. Click Bill Pay
+                      2. Fill payee name, address, account, amount
+                      3. Send Payment
+  Test Data           : Payee:Electric Co Addr:1 Main St City:NYC State:NY Zip:10001 Phone:5550001111 Acc:111222 Amt:75.00
+  Expected Result     : Payment successful; confirmation with transaction ID shown
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : BILL_002
+  Module              : Bill Pay
+  Test Case Title     : Verify confirmation contains payment details
+  Pre-conditions      : After successful bill pay
+  Test Steps          : 1. Check confirmation page
+  Test Data           : N/A
+  Expected Result     : Payee name, amount, account number displayed on confirmation
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : BILL_003
+  Module              : Bill Pay
+  Test Case Title     : Pay minimum bill amount
+  Pre-conditions      : Logged in
+  Test Steps          : 1. Enter amount 0.01
+                      2. Pay
+  Test Data           : Amount: 0.01
+  Expected Result     : Payment succeeds
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : BILL_004
+  Module              : Bill Pay
+  Test Case Title     : Pay bill and verify account balance deducted
+  Pre-conditions      : After payment
+  Test Steps          : 1. Note balance before
+                      2. Pay $50
+                      3. Check balance after
+  Test Data           : Amount: 50
+  Expected Result     : Balance reduced by $50
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : BILL_005
+  Module              : Bill Pay
+  Test Case Title     : Verify payment appears in account transaction history
+  Pre-conditions      : After payment
+  Test Steps          : 1. Go to Account Activity
+                      2. Check transaction
+  Test Data           : N/A
+  Expected Result     : Payment transaction visible in history with correct details
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : BILL_006
+  Module              : Bill Pay
+  Test Case Title     : Pay to payee with long name
+  Pre-conditions      : Logged in
+  Test Steps          : 1. Payee name: 50-char string
+                      2. Pay
+  Test Data           : Payee: 50-char name
+  Expected Result     : Payment succeeds or shows max-length constraint
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Low
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : BILL_007
+  Module              : Bill Pay
+  Test Case Title     : Verify all required fields marked appropriately
+  Pre-conditions      : On Bill Pay page
+  Test Steps          : 1. Observe field labels
+  Test Data           : N/A
+  Expected Result     : Required fields marked with * or similar
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Low
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : BILL_008
+  Module              : Bill Pay
+  Test Case Title     : Submit empty Bill Pay form
+  Pre-conditions      : On Bill Pay page
+  Test Steps          : 1. Click Send Payment without any data
+  Test Data           : All empty
+  Expected Result     : Validation errors for all required fields
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : BILL_009
+  Module              : Bill Pay
+  Test Case Title     : Leave payee name blank
+  Pre-conditions      : On Bill Pay page
+  Test Steps          : 1. Fill all except payee name
+                      2. Submit
+  Test Data           : Name: (empty)
+  Expected Result     : Error: 'Payee name is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : BILL_010
+  Module              : Bill Pay
+  Test Case Title     : Leave account number blank
+  Pre-conditions      : On Bill Pay page
+  Test Steps          : 1. Fill all except account number
+                      2. Submit
+  Test Data           : Account: (empty)
+  Expected Result     : Error: 'Account number is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : BILL_011
+  Module              : Bill Pay
+  Test Case Title     : Enter zero amount
+  Pre-conditions      : On Bill Pay page
+  Test Steps          : 1. Amount: 0
+                      2. Submit
+  Test Data           : Amount: 0
+  Expected Result     : Error: amount must be greater than zero
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : BILL_012
+  Module              : Bill Pay
+  Test Case Title     : Enter negative amount
+  Pre-conditions      : On Bill Pay page
+  Test Steps          : 1. Amount: -100
+                      2. Submit
+  Test Data           : Amount: -100
+  Expected Result     : Error: invalid amount
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : BILL_013
+  Module              : Bill Pay
+  Test Case Title     : Amount exceeds account balance
+  Pre-conditions      : Balance: $50
+  Test Steps          : 1. Amount: 500
+                      2. Submit
+  Test Data           : Amount: 500  Balance: 50
+  Expected Result     : Error: insufficient funds
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : BILL_014
+  Module              : Bill Pay
+  Test Case Title     : Invalid account number (letters)
+  Pre-conditions      : On Bill Pay page
+  Test Steps          : 1. Account: ABCDE
+                      2. Submit
+  Test Data           : Account: ABCDE
+  Expected Result     : Error: invalid account number format
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Medium
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : BILL_015
+  Module              : Bill Pay
+  Test Case Title     : Access Bill Pay without login
+  Pre-conditions      : Not logged in
+  Test Steps          : 1. Navigate to /billpay.htm
+  Test Data           : N/A
+  Expected Result     : Redirected to login
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : BILL_016
+  Module              : Bill Pay
+  Test Case Title     : Leave amount blank
+  Pre-conditions      : On Bill Pay page
+  Test Steps          : 1. Fill all except amount
+                      2. Submit
+  Test Data           : Amount: (empty)
+  Expected Result     : Error: 'Amount is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : BILL_017
+  Module              : Bill Pay
+  Test Case Title     : Enter alphabetic characters in amount
+  Pre-conditions      : On Bill Pay page
+  Test Steps          : 1. Amount: 'xyz'
+                      2. Submit
+  Test Data           : Amount: xyz
+  Expected Result     : Error: numeric value required
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : BILL_018
+  Module              : Bill Pay
+  Test Case Title     : SQL injection in payee name
+  Pre-conditions      : On Bill Pay page
+  Test Steps          : 1. Payee: ' DROP TABLE accounts;--
+                      2. Submit
+  Test Data           : Payee: ' DROP TABLE accounts;--
+  Expected Result     : Input sanitised; no DB error; payment rejected or sanitised
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Critical
+  Type                : Negative
+
+
+========================================================================================================================
+  MODULE: 7.AccountActivity
+========================================================================================================================
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACT_001
+  Module              : Account Activity
+  Test Case Title     : View transaction history for an account
+  Pre-conditions      : Logged in; account with transactions
+  Test Steps          : 1. Click Account Overview
+                      2. Select account
+                      3. View Activity
+  Test Data           : N/A
+  Expected Result     : Transaction list displayed with date, description, debit/credit, balance
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACT_002
+  Module              : Account Activity
+  Test Case Title     : View activity for account with no transactions
+  Pre-conditions      : Logged in; new account with $0 transactions
+  Test Steps          : 1. Select new account
+                      2. View Activity
+  Test Data           : N/A
+  Expected Result     : Message: 'No transactions found' or empty table with header
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACT_003
+  Module              : Account Activity
+  Test Case Title     : Filter activity by transaction type
+  Pre-conditions      : Account with mixed transactions
+  Test Steps          : 1. Select type filter (e.g. Credit)
+                      2. Apply
+  Test Data           : Filter: Credit
+  Expected Result     : Only credit transactions shown
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACT_004
+  Module              : Account Activity
+  Test Case Title     : Filter activity by month
+  Pre-conditions      : Transactions exist in multiple months
+  Test Steps          : 1. Select month from dropdown
+                      2. Apply
+  Test Data           : Month: January
+  Expected Result     : Only January transactions shown
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACT_005
+  Module              : Account Activity
+  Test Case Title     : Click transaction link to view transaction detail
+  Pre-conditions      : Transaction list visible
+  Test Steps          : 1. Click on a transaction ID/link
+  Test Data           : N/A
+  Expected Result     : Transaction detail page shown with full details
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACT_006
+  Module              : Account Activity
+  Test Case Title     : Access account activity without login
+  Pre-conditions      : Not logged in
+  Test Steps          : 1. Navigate to /activity.htm directly
+  Test Data           : N/A
+  Expected Result     : Redirected to login page
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACT_007
+  Module              : Account Activity
+  Test Case Title     : Access another user's account activity via URL manipulation
+  Pre-conditions      : Logged in as User A
+  Test Steps          : 1. Note account ID
+                      2. Modify URL to another user's account ID
+  Test Data           : Foreign account ID
+  Expected Result     : Access denied; error or redirect to own accounts
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Critical
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACT_008
+  Module              : Account Activity
+  Test Case Title     : Filter with no matching results
+  Pre-conditions      : Account exists
+  Test Steps          : 1. Filter by a future month with no transactions
+  Test Data           : Month: future month
+  Expected Result     : Empty result or 'No transactions found' message
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Low
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACT_009
+  Module              : Account Activity
+  Test Case Title     : Verify pagination or scrolling for large transaction list
+  Pre-conditions      : Account with 100+ transactions
+  Test Steps          : 1. View activity
+  Test Data           : N/A
+  Expected Result     : Transactions paginated or scrollable; page doesn't crash
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Medium
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACT_010
+  Module              : Account Activity
+  Test Case Title     : Invalid account ID in URL
+  Pre-conditions      : Logged in
+  Test Steps          : 1. Navigate with non-existent account ID in URL
+  Test Data           : Account ID: 999999
+  Expected Result     : Error page or redirect; no system error exposed
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACT_011
+  Module              : Account Activity
+  Test Case Title     : Filter by All months – verify all transactions shown
+  Pre-conditions      : Account with transactions
+  Test Steps          : 1. Select 'All' for month
+                      2. Apply
+  Test Data           : Month: All
+  Expected Result     : All transactions across all periods displayed
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : ACT_012
+  Module              : Account Activity
+  Test Case Title     : Verify transaction amounts shown with correct currency format
+  Pre-conditions      : Transactions exist
+  Test Steps          : 1. View account activity
+  Test Data           : N/A
+  Expected Result     : Amounts displayed as $X,XXX.XX format
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Low
+  Type                : Positive
+
+
+========================================================================================================================
+  MODULE: 8.UpdateProfile
+========================================================================================================================
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : PRO_001
+  Module              : Update Profile
+  Test Case Title     : Update profile with all valid new data
+  Pre-conditions      : Logged in
+  Test Steps          : 1. Click Update Contact Info
+                      2. Modify all fields
+                      3. Update Profile
+  Test Data           : New valid data for all fields
+  Expected Result     : Profile updated; success message displayed; data persists on refresh
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : PRO_002
+  Module              : Update Profile
+  Test Case Title     : Update only phone number
+  Pre-conditions      : Logged in
+  Test Steps          : 1. Change phone number only
+                      2. Update
+  Test Data           : Phone: 9998887777
+  Expected Result     : Phone updated; other fields unchanged
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : PRO_003
+  Module              : Update Profile
+  Test Case Title     : Update address fields
+  Pre-conditions      : Logged in
+  Test Steps          : 1. Change address, city, state, zip
+                      2. Update
+  Test Data           : New address data
+  Expected Result     : Address updated successfully
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : PRO_004
+  Module              : Update Profile
+  Test Case Title     : Verify pre-populated fields show current data
+  Pre-conditions      : Logged in with profile data
+  Test Steps          : 1. Navigate to Update Contact Info
+  Test Data           : N/A
+  Expected Result     : Fields pre-filled with current profile information
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : PRO_005
+  Module              : Update Profile
+  Test Case Title     : Update profile and verify changes in Forgot Login lookup
+  Pre-conditions      : Profile updated
+  Test Steps          : 1. Update address
+                      2. Log out
+                      3. Use new address in Forgot Login lookup
+  Test Data           : New address
+  Expected Result     : Lookup succeeds with updated address
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : PRO_006
+  Module              : Update Profile
+  Test Case Title     : Change password successfully
+  Pre-conditions      : Logged in
+  Test Steps          : 1. Navigate to Change Password
+                      2. Enter current password
+                      3. Enter new password
+                      4. Confirm
+                      5. Submit
+  Test Data           : Current:Pass@1  New:NewPass@2
+  Expected Result     : Password changed; can login with new password
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : PRO_007
+  Module              : Update Profile
+  Test Case Title     : Submit update with blank First Name
+  Pre-conditions      : On Update Profile page
+  Test Steps          : 1. Clear First Name
+                      2. Update Profile
+  Test Data           : First Name: (empty)
+  Expected Result     : Error: 'First name is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : PRO_008
+  Module              : Update Profile
+  Test Case Title     : Submit update with blank Last Name
+  Pre-conditions      : On Update Profile page
+  Test Steps          : 1. Clear Last Name
+                      2. Update Profile
+  Test Data           : Last Name: (empty)
+  Expected Result     : Error: 'Last name is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : PRO_009
+  Module              : Update Profile
+  Test Case Title     : Submit update with blank Address
+  Pre-conditions      : On Update Profile page
+  Test Steps          : 1. Clear Address
+                      2. Update Profile
+  Test Data           : Address: (empty)
+  Expected Result     : Error: 'Address is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : PRO_010
+  Module              : Update Profile
+  Test Case Title     : Change password – new and confirm mismatch
+  Pre-conditions      : On Change Password page
+  Test Steps          : 1. New password: Pass@1
+                      2. Confirm: Pass@2
+                      3. Submit
+  Test Data           : New: Pass@1  Confirm: Pass@2
+  Expected Result     : Error: 'Passwords did not match'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : PRO_011
+  Module              : Update Profile
+  Test Case Title     : Access profile update page without login
+  Pre-conditions      : Not logged in
+  Test Steps          : 1. Navigate to /updateprofile.htm
+  Test Data           : N/A
+  Expected Result     : Redirected to login page
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : PRO_012
+  Module              : Update Profile
+  Test Case Title     : XSS in First Name field
+  Pre-conditions      : On Update Profile page
+  Test Steps          : 1. First Name: <img src=x onerror=alert(1)>
+                      2. Update
+  Test Data           : XSS payload
+  Expected Result     : Input sanitised; script not executed; stored XSS prevented
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Critical
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : PRO_013
+  Module              : Update Profile
+  Test Case Title     : Change password with wrong current password
+  Pre-conditions      : On Change Password page
+  Test Steps          : 1. Current password: wrongpassword
+                      2. New: Pass@2
+                      3. Submit
+  Test Data           : Current: wrongpassword
+  Expected Result     : Error: current password incorrect
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : PRO_014
+  Module              : Update Profile
+  Test Case Title     : Enter invalid zip in profile update
+  Pre-conditions      : On Update Profile page
+  Test Steps          : 1. Zip: ABC
+                      2. Update
+  Test Data           : Zip: ABC
+  Expected Result     : Error or validation message for zip format
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Medium
+  Type                : Negative
+
+
+========================================================================================================================
+  MODULE: 9.RequestLoan
+========================================================================================================================
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOAN_001
+  Module              : Request Loan
+  Test Case Title     : Apply for loan with valid amount and down payment
+  Pre-conditions      : Logged in; account with balance
+  Test Steps          : 1. Click Request Loan
+                      2. Enter loan amount & down payment
+                      3. Apply
+  Test Data           : Amount: 1000  Down: 100  From: Acc1
+  Expected Result     : Loan approved; new loan account number displayed
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOAN_002
+  Module              : Request Loan
+  Test Case Title     : Verify new loan account appears in overview
+  Pre-conditions      : After loan approval
+  Test Steps          : 1. Navigate to Account Overview
+  Test Data           : N/A
+  Expected Result     : New loan account listed
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOAN_003
+  Module              : Request Loan
+  Test Case Title     : Apply loan with down payment equal to loan amount
+  Pre-conditions      : Logged in
+  Test Steps          : 1. Loan: 500  Down: 500
+                      2. Apply
+  Test Data           : Amount: 500  Down: 500
+  Expected Result     : Loan approved or processed; correct handling
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOAN_004
+  Module              : Request Loan
+  Test Case Title     : Verify loan page dropdowns contain all accounts
+  Pre-conditions      : Multiple accounts exist
+  Test Steps          : 1. Open Request Loan page
+                      2. Check dropdown
+  Test Data           : N/A
+  Expected Result     : All user accounts listed in 'From Account' dropdown
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Low
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOAN_005
+  Module              : Request Loan
+  Test Case Title     : Verify approval/rejection status message
+  Pre-conditions      : After applying
+  Test Steps          : 1. Note status on result page
+  Test Data           : N/A
+  Expected Result     : Clear APPROVED or DENIED message shown
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOAN_006
+  Module              : Request Loan
+  Test Case Title     : Apply loan with blank loan amount
+  Pre-conditions      : On Request Loan page
+  Test Steps          : 1. Leave loan amount blank
+                      2. Apply
+  Test Data           : Amount: (empty)
+  Expected Result     : Error: 'Loan amount is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOAN_007
+  Module              : Request Loan
+  Test Case Title     : Apply loan with blank down payment
+  Pre-conditions      : On Request Loan page
+  Test Steps          : 1. Leave down payment blank
+                      2. Apply
+  Test Data           : Down: (empty)
+  Expected Result     : Error: 'Down payment is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOAN_008
+  Module              : Request Loan
+  Test Case Title     : Apply loan with zero amount
+  Pre-conditions      : On Request Loan page
+  Test Steps          : 1. Loan: 0
+                      2. Apply
+  Test Data           : Amount: 0
+  Expected Result     : Error: amount must be greater than zero
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOAN_009
+  Module              : Request Loan
+  Test Case Title     : Apply loan with down payment exceeding account balance
+  Pre-conditions      : Balance: $50
+  Test Steps          : 1. Down: 500
+                      2. Apply
+  Test Data           : Down: 500  Balance: 50
+  Expected Result     : Loan denied or error: insufficient funds for down payment
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOAN_010
+  Module              : Request Loan
+  Test Case Title     : Enter negative loan amount
+  Pre-conditions      : On Request Loan page
+  Test Steps          : 1. Amount: -1000
+                      2. Apply
+  Test Data           : Amount: -1000
+  Expected Result     : Error: invalid amount
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOAN_011
+  Module              : Request Loan
+  Test Case Title     : Access Request Loan page without login
+  Pre-conditions      : Not logged in
+  Test Steps          : 1. Navigate to /requestloan.htm directly
+  Test Data           : N/A
+  Expected Result     : Redirected to login page
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : LOAN_012
+  Module              : Request Loan
+  Test Case Title     : Enter alphabetic characters in loan amount
+  Pre-conditions      : On Request Loan page
+  Test Steps          : 1. Amount: 'tenthousand'
+                      2. Apply
+  Test Data           : Amount: tenthousand
+  Expected Result     : Error: invalid amount; numeric required
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+
+========================================================================================================================
+  MODULE: 10.ContactUs
+========================================================================================================================
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : CON_001
+  Module              : Contact Us
+  Test Case Title     : Submit contact form with all valid data
+  Pre-conditions      : On /contact.htm
+  Test Steps          : 1. Fill Name, Email, Phone, Message
+                      2. Send
+  Test Data           : Name:John Email:john@test.com Phone:5551234 Msg:Test inquiry
+  Expected Result     : Success message: 'Thank you...' displayed
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : CON_002
+  Module              : Contact Us
+  Test Case Title     : Verify contact page accessible without login
+  Pre-conditions      : Not logged in
+  Test Steps          : 1. Navigate to /contact.htm
+  Test Data           : N/A
+  Expected Result     : Contact page loads correctly
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Low
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : CON_003
+  Module              : Contact Us
+  Test Case Title     : Submit with valid email format
+  Pre-conditions      : On contact page
+  Test Steps          : 1. Email: user@example.com
+                      2. Fill rest
+                      3. Submit
+  Test Data           : Email: user@example.com
+  Expected Result     : Form submits successfully
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : CON_004
+  Module              : Contact Us
+  Test Case Title     : Verify all fields present on contact page
+  Pre-conditions      : On contact page
+  Test Steps          : 1. Observe form fields
+  Test Data           : N/A
+  Expected Result     : Fields: Name, Email, Phone, Message all present
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Low
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : CON_005
+  Module              : Contact Us
+  Test Case Title     : Submit empty contact form
+  Pre-conditions      : On contact page
+  Test Steps          : 1. Click Send without filling any field
+  Test Data           : All empty
+  Expected Result     : Validation errors for required fields
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : CON_006
+  Module              : Contact Us
+  Test Case Title     : Submit with invalid email format
+  Pre-conditions      : On contact page
+  Test Steps          : 1. Email: notanemail
+                      2. Fill rest
+                      3. Submit
+  Test Data           : Email: notanemail
+  Expected Result     : Error: invalid email format
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : CON_007
+  Module              : Contact Us
+  Test Case Title     : Submit with blank name
+  Pre-conditions      : On contact page
+  Test Steps          : 1. Leave name blank
+                      2. Submit
+  Test Data           : Name: (empty)
+  Expected Result     : Error: 'Name is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : CON_008
+  Module              : Contact Us
+  Test Case Title     : Submit with blank message
+  Pre-conditions      : On contact page
+  Test Steps          : 1. Leave message blank
+                      2. Submit
+  Test Data           : Message: (empty)
+  Expected Result     : Error: 'Message is required'
+  Actual Result       : 
+  Status              : Fail
+  Priority            : High
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : CON_009
+  Module              : Contact Us
+  Test Case Title     : XSS in message field
+  Pre-conditions      : On contact page
+  Test Steps          : 1. Message: <script>alert('xss')</script>
+                      2. Submit
+  Test Data           : XSS payload
+  Expected Result     : Input sanitised; script not executed
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Critical
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : CON_010
+  Module              : Contact Us
+  Test Case Title     : Submit with email missing domain
+  Pre-conditions      : On contact page
+  Test Steps          : 1. Email: user@
+                      2. Submit
+  Test Data           : Email: user@
+  Expected Result     : Error: invalid email format
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Medium
+  Type                : Negative
+
+
+========================================================================================================================
+  MODULE: 11.UI_Navigation
+========================================================================================================================
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : UI_001
+  Module              : UI/Navigation
+  Test Case Title     : Verify home page loads correctly
+  Pre-conditions      : None
+  Test Steps          : 1. Navigate to /index.htm
+  Test Data           : N/A
+  Expected Result     : Page loads; logo, login form, navigation visible with no JS errors
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : UI_002
+  Module              : UI/Navigation
+  Test Case Title     : Verify all navigation links work on home page
+  Pre-conditions      : On home page
+  Test Steps          : 1. Click each nav link (About, Services, Products, Locations, Admin)
+  Test Data           : N/A
+  Expected Result     : Each link navigates to correct page without 404
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : UI_003
+  Module              : UI/Navigation
+  Test Case Title     : Verify site is responsive on mobile viewport
+  Pre-conditions      : None
+  Test Steps          : 1. Open site on 375px viewport (mobile)
+                      2. Observe layout
+  Test Data           : Viewport: 375px
+  Expected Result     : Content readable; no horizontal overflow; navigation accessible
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Medium
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : UI_004
+  Module              : UI/Navigation
+  Test Case Title     : Verify page titles are correct for each page
+  Pre-conditions      : Various pages
+  Test Steps          : 1. Navigate to each main page
+                      2. Check browser tab title
+  Test Data           : N/A
+  Expected Result     : Each page has descriptive, relevant title
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Low
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : UI_005
+  Module              : UI/Navigation
+  Test Case Title     : Sidebar navigation only shown when logged in
+  Pre-conditions      : Check both states
+  Test Steps          : 1. Check sidebar without login
+                      2. Login
+                      3. Check sidebar again
+  Test Data           : N/A
+  Expected Result     : Sidebar with account links visible only after login
+  Actual Result       : 
+  Status              : Pass
+  Priority            : High
+  Type                : Positive
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : UI_006
+  Module              : UI/Navigation
+  Test Case Title     : Navigate to non-existent page (404 check)
+  Pre-conditions      : None
+  Test Steps          : 1. Navigate to /parabank/fakepage.htm
+  Test Data           : URL: /fakepage.htm
+  Expected Result     : 404 page or custom error page displayed; no server stack trace
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Medium
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : UI_007
+  Module              : UI/Navigation
+  Test Case Title     : Verify no broken images on main pages
+  Pre-conditions      : Logged in
+  Test Steps          : 1. Navigate through main pages
+                      2. Check for broken image icons
+  Test Data           : N/A
+  Expected Result     : All images load correctly; no broken image placeholders
+  Actual Result       : 
+  Status              : Fail
+  Priority            : Low
+  Type                : Negative
+
+------------------------------------------------------------------------------------------------------------------------
+  TC ID               : UI_008
+  Module              : UI/Navigation
+  Test Case Title     : Verify footer links are functional
+  Pre-conditions      : On any page
+  Test Steps          : 1. Click footer links (Home, About, Services, etc.)
+  Test Data           : N/A
+  Expected Result     : All footer links navigate correctly without 404
+  Actual Result       : 
+  Status              : Pass
+  Priority            : Low
+  Type                : Positive
+
+========================================================================================================================
+END OF TEST SUITE
+========================================================================================================================

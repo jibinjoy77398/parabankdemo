@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Execution Report</title>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg: #f9fafb;
+            --card-bg: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.5;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        header h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-top: 0.25rem;
+        }
+
+        header .timestamp-block {
+            text-align: right;
+        }
+
+        header .timestamp-block h2 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        header .timestamp-block p {
+            color: var(--text-main);
+            font-weight: 500;
+        }
+
+        /* Metrics Row */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .metric-card {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .metric-title {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .metric-value {
+            font-size: 2.25rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .metric-value.success { color: var(--success); }
+        .metric-value.danger { color: var(--danger); }
+        .metric-value.warning { color: var(--warning); }
+
+        /* Breakdown Section */
+        .breakdown-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .breakdown-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid var(--border);
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            width: 100%;
+            text-align: left;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .chart-container {
+            width: 100%;
+            max-width: 280px;
+            aspect-ratio: 1;
+            margin: 0 auto;
+        }
+
+        .failures-list {
+            list-style: none;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .failure-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.25rem;
+            background-color: var(--bg);
+            border-radius: 0.75rem;
+            border-left: 4px solid var(--danger);
+        }
+
+        .failure-item.skipped {
+            border-left-color: var(--warning);
+        }
+
+        .failure-icon {
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        .failure-details h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--text-main);
+        }
+
+        .failure-details p {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Toggle & Table */
+        .actions-row {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .toggle-btn {
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+
+        .toggle-btn:hover {
+            background-color: var(--bg);
+            border-color: #d1d5db;
+        }
+
+        .details-section {
+            display: none;
+            background-color: var(--card-bg);
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .details-section.active {
+            display: block;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1.25rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background-color: var(--bg);
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            font-size: 0.875rem;
+            color: var(--text-main);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-badge.fail {
+            background-color: #fef2f2;
+            color: #b91c1c;
+        }
+
+        .status-badge.skip {
+            background-color: #fffbeb;
+            color: #b45309;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div>
+                <h1>ParaBank Test Automation</h1>
+                <p>Execution Report</p>
+            </div>
+            <div class="timestamp-block">
+                <h2>Generated On</h2>
+                <p id="timestamp"></p>
+            </div>
+        </header>
+
+        <!-- High-Level Metrics -->
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <span class="metric-title">Total Cases</span>
+                <span class="metric-value">166</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-title">Passed ✅</span>
+                <span class="metric-value success">162</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-title">Failed ❌</span>
+                <span class="metric-value danger">3</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-title">Skipped ⚠️</span>
+                <span class="metric-value warning">1</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-title">Duration ⏱️</span>
+                <span class="metric-value">45.3s</span>
+            </div>
+        </div>
+
+        <!-- Visual Breakdown -->
+        <div class="breakdown-section">
+            <div class="card">
+                <h2>Status Distribution</h2>
+                <div class="chart-container">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Top 3 Failures</h2>
+                <ul class="failures-list">
+                    <li class="failure-item">
+                        <span class="failure-icon">❌</span>
+                        <div class="failure-details">
+                            <h3>[PB-101] Transfer Funds UI</h3>
+                            <p>Timeout waiting for submit button confirmation.</p>
+                        </div>
+                    </li>
+                    <li class="failure-item">
+                        <span class="failure-icon">❌</span>
+                        <div class="failure-details">
+                            <h3>[PB-102] Update Profile API</h3>
+                            <p>500 Internal Server Error on Submit Action.</p>
+                        </div>
+                    </li>
+                    <li class="failure-item skipped">
+                        <span class="failure-icon">⚠️</span>
+                        <div class="failure-details">
+                            <h3>[PB-103] Bill Pay Database</h3>
+                            <p>Slow query response exceeding 10s test timeout threshold.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Interactivity -->
+        <div class="actions-row">
+            <button class="toggle-btn" onclick="toggleDetails()" id="toggleBtn">
+                Show Failed Test Details
+            </button>
+        </div>
+
+        <!-- Detailed Table -->
+        <div class="details-section" id="detailsTable">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Test ID</th>
+                        <th>Module</th>
+                        <th>Failure Reason</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>TF_004</td>
+                        <td>Transfer Funds</td>
+                        <td>Locator not found: input[value='Transfer']</td>
+                        <td><span class="status-badge fail">❌ Failed</span></td>
+                    </tr>
+                    <tr>
+                        <td>UP_012</td>
+                        <td>Update Profile</td>
+                        <td>API returned status 500 when saving profile</td>
+                        <td><span class="status-badge fail">❌ Failed</span></td>
+                    </tr>
+                    <tr>
+                        <td>BP_008</td>
+                        <td>Bill Pay</td>
+                        <td>Test exceeded 30000ms timeout</td>
+                        <td><span class="status-badge skip">⚠️ Skipped</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Chart & Interactivity Logic -->
+    <script>
+        // Set dynamic timestamp
+        const now = new Date();
+        const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+        document.getElementById('timestamp').textContent = now.toLocaleDateString('en-US', options);
+
+        // Render Minimalist Doughnut Chart
+        const ctx = document.getElementById('statusChart').getContext('2d');
+        const statusChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Passed', 'Failed', 'Skipped'],
+                datasets: [{
+                    data: [162, 3, 1],
+                    backgroundColor: [
+                        '#10b981', // green / success 
+                        '#ef4444', // red / fail
+                        '#f59e0b'  // orange / skip
+                    ],
+                    borderWidth: 0, // removed border for flat SaaS look
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                cutout: '78%', // High cutout for minimalist ring
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 24,
+                            usePointStyle: true,
+                            font: {
+                                family: "'Inter', sans-serif",
+                                size: 13,
+                                weight: 500
+                            },
+                            color: '#4b5563'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#111827',
+                        padding: 12,
+                        cornerRadius: 8,
+                        titleFont: { family: "'Inter', sans-serif", size: 13 },
+                        bodyFont: { family: "'Inter', sans-serif", size: 13 }
+                    }
+                }
+            }
+        });
+
+        // Toggle Table Details
+        function toggleDetails() {
+            const tableSection = document.getElementById('detailsTable');
+            const toggleButton = document.getElementById('toggleBtn');
+            const isActive = tableSection.classList.toggle('active');
+            
+            toggleButton.textContent = isActive ? 'Hide Failed Test Details' : 'Show Failed Test Details';
+        }
+    </script>
+</body>
+</html>

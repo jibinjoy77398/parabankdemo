@@ -1,0 +1,3 @@
+LOG_001 - Successful login with valid credentials
+REG_001 - Successful registration with all valid data
+LOG_002 - Login with 'Remember Me' checkbox (if present)

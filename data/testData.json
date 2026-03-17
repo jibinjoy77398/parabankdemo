@@ -1,0 +1,23 @@
+{
+  "validUser": {
+    "username": "steve",
+    "password": "test"
+  },
+  "invalidUser": {
+    "username": "ghost999",
+    "password": "wrongPassword"
+  },
+  "registrationDetails": {
+    "firstName": "Test",
+    "lastName": "User",
+    "address": "123 Main St",
+    "city": "Springfield",
+    "state": "IL",
+    "zipCode": "62701",
+    "phoneNumber": "5551234567",
+    "ssn": "123-45-6789",
+    "username": "steve",
+    "password": "test",
+    "confirmPassword": "test"
+  }
+}
