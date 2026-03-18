@@ -3,468 +3,518 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Execution Report</title>
-    <!-- Chart.js CDN -->
+    <title>ParaBank | Test Intelligence Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --primary: #4f46e5;
+            --primary: #6366f1;
+            --primary-light: #818cf8;
             --success: #10b981;
-            --danger: #ef4444;
+            --danger: #f43f5e;
             --warning: #f59e0b;
-            --bg: #f9fafb;
-            --card-bg: #ffffff;
-            --text-main: #111827;
-            --text-muted: #6b7280;
-            --border: #e5e7eb;
+            --info: #3b82f6;
+            --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Outfit', sans-serif;
         }
 
         body {
-            background-color: var(--bg);
+            background: var(--bg-gradient);
+            background-attachment: fixed;
             color: var(--text-main);
-            line-height: 1.5;
-            padding: 2rem;
+            min-height: 100vh;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: center;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        @media (min-width: 768px) {
+            body { padding: 3rem; }
+        }
+
+        .dashboard {
+            width: 100%;
+            max-width: 1100px;
             display: flex;
             flex-direction: column;
             gap: 2rem;
+            animation: fadeIn 0.8s ease-out;
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glassmorphism Card Style */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 1.5rem;
+            box-shadow: var(--shadow-lg);
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Header */
         header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border);
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
         }
 
-        header h1 {
-            font-size: 1.875rem;
+        @media (min-width: 768px) {
+            header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: flex-end;
+                text-align: left;
+            }
+        }
+
+        .brand h1 {
+            font-size: 2.5rem;
             font-weight: 700;
-            letter-spacing: -0.025em;
+            background: linear-gradient(to right, var(--primary), var(--info));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.05em;
         }
 
-        header p {
+        .brand p {
             color: var(--text-muted);
-            font-size: 1rem;
-            margin-top: 0.25rem;
+            font-size: 1.125rem;
+            font-weight: 400;
         }
 
-        header .timestamp-block {
-            text-align: right;
-        }
-
-        header .timestamp-block h2 {
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--text-muted);
-        }
-
-        header .timestamp-block p {
-            color: var(--text-main);
-            font-weight: 500;
-        }
-
-        /* Metrics Row */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .metric-card {
-            background-color: var(--card-bg);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        .meta {
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
-            border: 1px solid var(--border);
+            gap: 0.25rem;
         }
 
-        .metric-title {
-            color: var(--text-muted);
+        .meta h2 {
             font-size: 0.875rem;
             font-weight: 600;
             text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+        }
+
+        .meta p {
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Metrics Grid */
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        @media (min-width: 992px) {
+            .metrics {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        .metric-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            padding: 1.25rem;
+            border-radius: 1.25rem;
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid var(--glass-border);
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
             letter-spacing: 0.05em;
+            color: var(--text-muted);
         }
 
         .metric-value {
-            font-size: 2.25rem;
+            font-size: 1.75rem;
             font-weight: 700;
-            line-height: 1;
+            line-height: 1.2;
         }
 
         .metric-value.success { color: var(--success); }
         .metric-value.danger { color: var(--danger); }
         .metric-value.warning { color: var(--warning); }
 
-        /* Breakdown Section */
-        .breakdown-section {
+        /* Main Content Layout */
+        .main-layout {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
+            grid-template-columns: 1fr;
+            gap: 2rem;
         }
 
-        @media (max-width: 768px) {
-            .breakdown-section {
-                grid-template-columns: 1fr;
+        @media (min-width: 992px) {
+            .main-layout {
+                grid-template-columns: 400px 1fr;
             }
         }
 
-        .card {
-            background-color: var(--card-bg);
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+        /* Chart Section */
+        .chart-box {
             display: flex;
             flex-direction: column;
             align-items: center;
-            border: 1px solid var(--border);
+            gap: 1.5rem;
         }
 
-        .card h2 {
-            font-size: 1.25rem;
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .chart-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .chart-label span {
+            display: block;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
             font-weight: 600;
+        }
+
+        .chart-label strong {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* Failures / Highlights Section */
+        .content-box h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
             margin-bottom: 1.5rem;
-            width: 100%;
-            text-align: left;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .chart-container {
-            width: 100%;
-            max-width: 280px;
-            aspect-ratio: 1;
-            margin: 0 auto;
-        }
-
-        .failures-list {
-            list-style: none;
-            width: 100%;
+        .highlights {
             display: flex;
             flex-direction: column;
             gap: 1rem;
         }
 
-        .failure-item {
+        .highlight-card {
             display: flex;
-            align-items: flex-start;
             gap: 1rem;
             padding: 1.25rem;
-            background-color: var(--bg);
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            transition: background 0.2s ease;
+        }
+
+        .highlight-card:hover {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .icon-box {
+            width: 40px;
+            height: 40px;
             border-radius: 0.75rem;
-            border-left: 4px solid var(--danger);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
         }
 
-        .failure-item.skipped {
-            border-left-color: var(--warning);
-        }
+        .icon-box.danger { background: #fee2e2; color: var(--danger); }
+        .icon-box.warning { background: #fef3c7; color: var(--warning); }
+        .icon-box.success { background: #d1fae5; color: var(--success); }
 
-        .failure-icon {
-            font-size: 1.5rem;
-            line-height: 1;
-        }
-
-        .failure-details h3 {
+        .info-box h4 {
             font-size: 1rem;
             font-weight: 600;
-            margin-bottom: 0.25rem;
-            color: var(--text-main);
+            margin-bottom: 0.125rem;
         }
 
-        .failure-details p {
+        .info-box p {
+            font-size: 0.875rem;
             color: var(--text-muted);
-            font-size: 0.875rem;
         }
 
-        /* Toggle & Table */
-        .actions-row {
-            display: flex;
-            justify-content: flex-start;
-        }
-
-        .toggle-btn {
-            background-color: var(--card-bg);
-            color: var(--text-main);
-            border: 1px solid var(--border);
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-        }
-
-        .toggle-btn:hover {
-            background-color: var(--bg);
-            border-color: #d1d5db;
-        }
-
-        .details-section {
-            display: none;
-            background-color: var(--card-bg);
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        /* Modern Table Section */
+        .details-wrapper {
             overflow: hidden;
-            border: 1px solid var(--border);
-            margin-bottom: 2rem;
-            animation: fadeIn 0.3s ease;
+            transition: max-height 0.4s ease-in-out;
+            max-height: 0;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .details-wrapper.open {
+            max-height: 1000px;
         }
 
-        .details-section.active {
-            display: block;
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 1rem;
+            border-radius: 1rem;
+            border: 1px solid var(--glass-border);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 1.25rem 1.5rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.2);
         }
 
         th {
-            background-color: var(--bg);
-            font-weight: 600;
-            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.5);
+            padding: 1rem;
+            text-align: left;
             font-size: 0.75rem;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            color: var(--text-muted);
         }
 
         td {
+            padding: 1rem;
             font-size: 0.875rem;
-            color: var(--text-main);
+            border-bottom: 1px solid var(--glass-border);
         }
 
-        tr:last-child td {
-            border-bottom: none;
-        }
+        tr:last-child td { border-bottom: none; }
 
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.375rem;
+        .badge {
             padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
+            border-radius: 2rem;
             font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge.danger { background: #fee2e2; color: var(--danger); }
+        .badge.warning { background: #fef3c7; color: var(--warning); }
+
+        /* Action Button */
+        .btn-toggle {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 1rem;
+            font-size: 1rem;
             font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease, border-radius 0.3s ease;
+            box-shadow: var(--shadow-md);
         }
 
-        .status-badge.fail {
-            background-color: #fef2f2;
-            color: #b91c1c;
+        .btn-toggle:hover {
+            background: var(--primary-light);
         }
 
-        .status-badge.skip {
-            background-color: #fffbeb;
-            color: #b45309;
+        .btn-toggle.active {
+            border-radius: 1rem 1rem 0 0;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header>
-            <div>
-                <h1>ParaBank Test Automation</h1>
-                <p>Execution Report</p>
+    <div class="dashboard">
+        <!-- Header Section -->
+        <header class="glass-card">
+            <div class="brand">
+                <h1>ParaBank Intelligence</h1>
+                <p>Automated QA Performance Insights</p>
             </div>
-            <div class="timestamp-block">
-                <h2>Generated On</h2>
-                <p id="timestamp"></p>
+            <div class="meta">
+                <h2>Generated At</h2>
+                <p id="timestamp">Mar 18, 2026 • 10:00 AM</p>
             </div>
         </header>
 
-        <!-- High-Level Metrics -->
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <span class="metric-title">Total Cases</span>
+        <!-- Metrics Overview -->
+        <div class="metrics glass-card">
+            <div class="metric-item">
+                <span class="metric-label">Total Volume</span>
                 <span class="metric-value">166</span>
             </div>
-            <div class="metric-card">
-                <span class="metric-title">Passed ✅</span>
-                <span class="metric-value success">162</span>
+            <div class="metric-item">
+                <span class="metric-label">Success ✅</span>
+                <span class="metric-value success">165</span>
             </div>
-            <div class="metric-card">
-                <span class="metric-title">Failed ❌</span>
-                <span class="metric-value danger">3</span>
+            <div class="metric-item">
+                <span class="metric-label">Defects ❌</span>
+                <span class="metric-value danger">0</span>
             </div>
-            <div class="metric-card">
-                <span class="metric-title">Skipped ⚠️</span>
+            <div class="metric-item">
+                <span class="metric-label">Flaky ⚠️</span>
                 <span class="metric-value warning">1</span>
             </div>
-            <div class="metric-card">
-                <span class="metric-title">Duration ⏱️</span>
-                <span class="metric-value">45.3s</span>
+            <div class="metric-item">
+                <span class="metric-label">Duration ⏱️</span>
+                <span class="metric-value">35.2s</span>
             </div>
         </div>
 
-        <!-- Visual Breakdown -->
-        <div class="breakdown-section">
-            <div class="card">
-                <h2>Status Distribution</h2>
-                <div class="chart-container">
+        <!-- Main Insights -->
+        <div class="main-layout">
+            <!-- Distribution -->
+            <div class="glass-card chart-box">
+                <div class="chart-wrapper">
                     <canvas id="statusChart"></canvas>
+                    <div class="chart-label">
+                        <span>Pass Rate</span>
+                        <strong id="passPercent">99%</strong>
+                    </div>
                 </div>
             </div>
 
-            <div class="card">
-                <h2>Top 3 Failures</h2>
-                <ul class="failures-list">
-                    <li class="failure-item">
-                        <span class="failure-icon">❌</span>
-                        <div class="failure-details">
-                            <h3>[PB-101] Transfer Funds UI</h3>
-                            <p>Timeout waiting for submit button confirmation.</p>
+            <!-- Highlights -->
+            <div class="glass-card content-box">
+                <h3>🔍 Key Observations</h3>
+                <div class="highlights">
+                    <div class="highlight-card">
+                        <div class="icon-box success">✨</div>
+                        <div class="info-box">
+                            <h4>Peak Performance Reached</h4>
+                            <p>Test suite execution optimized to 35s using 4 parallel workers.</p>
                         </div>
-                    </li>
-                    <li class="failure-item">
-                        <span class="failure-icon">❌</span>
-                        <div class="failure-details">
-                            <h3>[PB-102] Update Profile API</h3>
-                            <p>500 Internal Server Error on Submit Action.</p>
+                    </div>
+                    <div class="highlight-card">
+                        <div class="icon-box warning">⚠️</div>
+                        <div class="info-box">
+                            <h4>Minor Instability Detected</h4>
+                            <p>1 test case (REG_001) required a retry due to network latency.</p>
                         </div>
-                    </li>
-                    <li class="failure-item skipped">
-                        <span class="failure-icon">⚠️</span>
-                        <div class="failure-details">
-                            <h3>[PB-103] Bill Pay Database</h3>
-                            <p>Slow query response exceeding 10s test timeout threshold.</p>
-                        </div>
-                    </li>
-                </ul>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Interactivity -->
-        <div class="actions-row">
-            <button class="toggle-btn" onclick="toggleDetails()" id="toggleBtn">
-                Show Failed Test Details
+        <!-- Interactive Details -->
+        <div>
+            <button class="btn-toggle" onclick="toggleDetails()" id="toggleBtn">
+                View Instance Detailed Analysis
             </button>
-        </div>
-
-        <!-- Detailed Table -->
-        <div class="details-section" id="detailsTable">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Test ID</th>
-                        <th>Module</th>
-                        <th>Failure Reason</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>TF_004</td>
-                        <td>Transfer Funds</td>
-                        <td>Locator not found: input[value='Transfer']</td>
-                        <td><span class="status-badge fail">❌ Failed</span></td>
-                    </tr>
-                    <tr>
-                        <td>UP_012</td>
-                        <td>Update Profile</td>
-                        <td>API returned status 500 when saving profile</td>
-                        <td><span class="status-badge fail">❌ Failed</span></td>
-                    </tr>
-                    <tr>
-                        <td>BP_008</td>
-                        <td>Bill Pay</td>
-                        <td>Test exceeded 30000ms timeout</td>
-                        <td><span class="status-badge skip">⚠️ Skipped</span></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="details-wrapper" id="detailsWrapper">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Test Module</th>
+                                <th>Category</th>
+                                <th>Status Observation</th>
+                                <th>Severity</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>REG_002</td>
+                                <td>Registration</td>
+                                <td>Passed with optimal response time.</td>
+                                <td><span class="badge success">Low</span></td>
+                            </tr>
+                            <tr>
+                                <td>LOG_001</td>
+                                <td>Authentication</td>
+                                <td>Network & Console internal state validated.</td>
+                                <td><span class="badge success">Low</span></td>
+                            </tr>
+                            <tr>
+                                <td>REG_001</td>
+                                <td>Registration</td>
+                                <td>Flaky: Passed on second attempt.</td>
+                                <td><span class="badge warning">Medium</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Chart & Interactivity Logic -->
     <script>
-        // Set dynamic timestamp
+        // Update Timestamp
         const now = new Date();
-        const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-        document.getElementById('timestamp').textContent = now.toLocaleDateString('en-US', options);
+        document.getElementById('timestamp').textContent = now.toLocaleString('en-US', { 
+            month: 'short', day: '2-digit', year: 'numeric', 
+            hour: '2-digit', minute: '2-digit', hour12: true 
+        }).replace(',', ' •');
 
-        // Render Minimalist Doughnut Chart
+        // Distribution Chart
         const ctx = document.getElementById('statusChart').getContext('2d');
-        const statusChart = new Chart(ctx, {
+        new Chart(ctx, {
             type: 'doughnut',
             data: {
-                labels: ['Passed', 'Failed', 'Skipped'],
+                labels: ['Passed', 'Flaky', 'Failed'],
                 datasets: [{
-                    data: [162, 3, 1],
-                    backgroundColor: [
-                        '#10b981', // green / success 
-                        '#ef4444', // red / fail
-                        '#f59e0b'  // orange / skip
-                    ],
-                    borderWidth: 0, // removed border for flat SaaS look
-                    hoverOffset: 4
+                    data: [165, 1, 0],
+                    backgroundColor: ['#10b981', '#f59e0b', '#f43f5e'],
+                    borderWidth: 0,
+                    hoverOffset: 10
                 }]
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
-                cutout: '78%', // High cutout for minimalist ring
+                cutout: '82%',
                 plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 24,
-                            usePointStyle: true,
-                            font: {
-                                family: "'Inter', sans-serif",
-                                size: 13,
-                                weight: 500
-                            },
-                            color: '#4b5563'
-                        }
-                    },
+                    legend: { display: false },
                     tooltip: {
-                        backgroundColor: '#111827',
+                        enabled: true,
+                        backgroundColor: '#0f172a',
                         padding: 12,
                         cornerRadius: 8,
-                        titleFont: { family: "'Inter', sans-serif", size: 13 },
-                        bodyFont: { family: "'Inter', sans-serif", size: 13 }
+                        titleFont: { family: 'Outfit', size: 14, weight: 600 },
+                        bodyFont: { family: 'Outfit', size: 14 }
                     }
                 }
             }
         });
 
-        // Toggle Table Details
+        // Toggle Details
         function toggleDetails() {
-            const tableSection = document.getElementById('detailsTable');
-            const toggleButton = document.getElementById('toggleBtn');
-            const isActive = tableSection.classList.toggle('active');
-            
-            toggleButton.textContent = isActive ? 'Hide Failed Test Details' : 'Show Failed Test Details';
+            const wrapper = document.getElementById('detailsWrapper');
+            const btn = document.getElementById('toggleBtn');
+            wrapper.classList.toggle('open');
+            btn.classList.toggle('active');
+            btn.textContent = wrapper.classList.contains('open') 
+                ? 'Hide Instance Detailed Analysis' 
+                : 'View Instance Detailed Analysis';
         }
     </script>
 </body>
