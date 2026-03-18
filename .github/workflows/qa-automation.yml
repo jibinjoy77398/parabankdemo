@@ -76,7 +76,7 @@ jobs:
           path: reports/
 
       - name: Send Email Report
-        if: always()
+        if: always() && secrets.MAIL_RECIPIENT
         uses: dawidd6/action-send-mail@v4
         with:
           server_address: smtp.gmail.com
