@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ main ]
   schedule:
-    - cron: '30 12 * * *' # 6:00 PM IST (12:30 PM UTC)
+    - cron: '30 2,7,12 * * *' # 8:00 AM, 1:00 PM, 6:00 PM IST (UTC: 02:30, 07:30, 12:30)
   workflow_dispatch:
 
 # Permissions needed for deploying to GitHub Pages
