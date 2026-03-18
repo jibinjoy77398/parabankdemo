@@ -17,8 +17,7 @@ env:
   # Fixes the Node.js 20 deprecation warning
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true 
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow the current test to finish.
+# Allow only one concurrent deployment
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -45,23 +44,27 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Automation Tests
-        run: npx playwright test --reporter=list,junit,html
+        run: npx playwright test
         env:
           PLAYWRIGHT_JUNIT_OUTPUT_NAME: results.xml
 
-      - name: Upload Playwright HTML Report
+      - name: Generate Artistic Report
+        if: always()
+        run: node scripts/generate-artistic-report.js
+
+      - name: Upload Playwright HTML Report (Standard)
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: playwright-report/
 
-      - name: Upload JUnit Results (XML)
+      - name: Upload Artistic Pictorial Report (HTML + Media)
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: junit-results
-          path: results.xml
+          name: qa-pictorial-report
+          path: reports/
 
       # We only upload to Pages if we're on the main branch
       - name: Upload Pages Artifact

@@ -1,4 +1,87 @@
+const fs = require('fs');
+const path = require('path');
 
+const RESULTS_FILE = 'test-results.json';
+const OUTPUT_DIR = 'reports';
+const ATTACHMENTS_DIR = path.join(OUTPUT_DIR, 'attachments');
+
+// Ensure output directories exist
+if (!fs.existsSync(ATTACHMENTS_DIR)) {
+    fs.mkdirSync(ATTACHMENTS_DIR, { recursive: true });
+}
+
+if (!fs.existsSync(RESULTS_FILE)) {
+    console.error(`Error: ${RESULTS_FILE} not found. Run tests first.`);
+    process.exit(1);
+}
+
+const rawData = fs.readFileSync(RESULTS_FILE);
+const results = JSON.parse(rawData);
+
+// Aggregate Statistics
+let total = 0;
+let passed = 0;
+let failed = 0;
+let skipped = 0;
+let durationMs = 0;
+
+const testDetails = [];
+
+results.suites.forEach(suite => processSuite(suite));
+
+function processSuite(suite) {
+    if (suite.suites) suite.suites.forEach(s => processSuite(s));
+    if (suite.specs) {
+        suite.specs.forEach(spec => {
+            spec.tests.forEach(test => {
+                total++;
+                const result = test.results[0]; // Take the first execution result
+                durationMs += result.duration;
+
+                let status = result.status;
+                if (status === 'passed') passed++;
+                else if (status === 'failed' || status === 'timedOut') failed++;
+                else if (status === 'skipped') skipped++;
+
+                // Collect attachments (screenshots/videos)
+                const attachments = [];
+                if (result.attachments) {
+                    result.attachments.forEach(att => {
+                        const ext = path.extname(att.path);
+                        const fileName = `${spec.id || 'test'}_${Date.now()}${ext}`;
+                        const destPath = path.join(ATTACHMENTS_DIR, fileName);
+                        
+                        try {
+                            fs.copyFileSync(att.path, destPath);
+                            attachments.push({
+                                name: att.name,
+                                contentType: att.contentType,
+                                path: `attachments/${fileName}`
+                            });
+                        } catch (e) {
+                            console.warn(`Could not copy attachment: ${att.path}`);
+                        }
+                    });
+                }
+
+                testDetails.push({
+                    title: spec.title,
+                    module: path.basename(suite.file || 'Unknown'),
+                    status: status,
+                    duration: (result.duration / 1000).toFixed(2) + 's',
+                    error: result.error ? result.error.message : null,
+                    attachments: attachments
+                });
+            });
+        });
+    }
+}
+
+const durationSec = (durationMs / 1000).toFixed(1) + 's';
+const passRate = total > 0 ? Math.round((passed / total) * 100) : 0;
+
+// Generate HTML Content
+const htmlContent = `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -96,35 +179,40 @@
             </div>
             <div class="meta">
                 <h2>Execution Link</h2>
-                <p id="timestamp">18/3/2026, 10:16:43 am</p>
+                <p id="timestamp">${new Date().toLocaleString()}</p>
             </div>
         </header>
 
         <div class="metrics glass-card">
-            <div class="metric-item"><span class="metric-label">Total</span><span class="metric-value">1</span></div>
-            <div class="metric-item"><span class="metric-label">Passed</span><span class="metric-value success">0</span></div>
-            <div class="metric-item"><span class="metric-label">Failed</span><span class="metric-value danger">1</span></div>
-            <div class="metric-item"><span class="metric-label">Skipped</span><span class="metric-value warning">0</span></div>
-            <div class="metric-item"><span class="metric-label">Duration</span><span class="metric-value">6.4s</span></div>
+            <div class="metric-item"><span class="metric-label">Total</span><span class="metric-value">${total}</span></div>
+            <div class="metric-item"><span class="metric-label">Passed</span><span class="metric-value success">${passed}</span></div>
+            <div class="metric-item"><span class="metric-label">Failed</span><span class="metric-value danger">${failed}</span></div>
+            <div class="metric-item"><span class="metric-label">Skipped</span><span class="metric-value warning">${skipped}</span></div>
+            <div class="metric-item"><span class="metric-label">Duration</span><span class="metric-value">${durationSec}</span></div>
         </div>
 
         <div class="main-layout">
             <div class="glass-card chart-box">
                 <div class="chart-wrapper">
                     <canvas id="statusChart"></canvas>
-                    <div class="chart-label"><span>Pass Rate</span><strong>0%</strong></div>
+                    <div class="chart-label"><span>Pass Rate</span><strong>${passRate}%</strong></div>
                 </div>
             </div>
 
             <div class="glass-card content-box">
                 <h3>🔍 Run Highlights</h3>
                 <div class="highlights">
-                    
+                    ${failed > 0 ? `
                         <div class="highlight-card">
                             <div class="icon-box danger">⚠️</div>
-                            <div class="info-box"><h4>Action Required</h4><p>1 test failures detected. Check detailed analysis for screenshots and videos.</p></div>
+                            <div class="info-box"><h4>Action Required</h4><p>${failed} test failures detected. Check detailed analysis for screenshots and videos.</p></div>
                         </div>
-                    
+                    ` : `
+                        <div class="highlight-card">
+                            <div class="icon-box success">✨</div>
+                            <div class="info-box"><h4>All Systems Go</h4><p>Suite executed perfectly with 100% functional integrity.</p></div>
+                        </div>
+                    `}
                 </div>
             </div>
         </div>
@@ -143,43 +231,25 @@
                             </tr>
                         </thead>
                         <tbody>
-                            
+                            ${testDetails.map(test => `
                                 <tr>
-                                    <td><strong>Intentional Failure for Report Verification</strong><br><small style="color:var(--danger)">Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
-
-Locator: locator('.non-existent-element')
-Expected: visible
-Timeout: 5000ms
-Error: element(s) not found
-
-Call log:
-[2m  - Expect "toBeVisible" with timeout 5000ms[22m
-[2m  - waiting for locator('.non-existent-element')[22m
-</small></td>
-                                    <td>failure-test.spec.ts</td>
+                                    <td><strong>${test.title}</strong>${test.error ? `<br><small style="color:var(--danger)">${test.error}</small>` : ''}</td>
+                                    <td>${test.module}</td>
                                     <td>
-                                        <span class="badge failed">failed</span>
-                                        
+                                        <span class="badge ${test.status}">${test.status}</span>
+                                        ${test.attachments.length > 0 ? `
                                             <div class="media-container">
-                                                
-                                                    <div class="media-item" onclick="openMedia('attachments/5cc3cef4b7173ad98286-fbcf5e10ba01267611b0_1773809203424.png', 'image/png')">
-                                                        🖼️ screenshot
+                                                ${test.attachments.map(att => `
+                                                    <div class="media-item" onclick="openMedia('${att.path}', '${att.contentType}')">
+                                                        ${att.contentType.includes('image') ? '🖼️' : '🎥'} ${att.name || 'Attachment'}
                                                     </div>
-                                                
-                                                    <div class="media-item" onclick="openMedia('attachments/5cc3cef4b7173ad98286-fbcf5e10ba01267611b0_1773809203425.webm', 'video/webm')">
-                                                        🎥 video
-                                                    </div>
-                                                
-                                                    <div class="media-item" onclick="openMedia('attachments/5cc3cef4b7173ad98286-fbcf5e10ba01267611b0_1773809203426.md', 'text/markdown')">
-                                                        🎥 error-context
-                                                    </div>
-                                                
+                                                `).join('')}
                                             </div>
-                                        
+                                        ` : ''}
                                     </td>
-                                    <td>6.45s</td>
+                                    <td>${test.duration}</td>
                                 </tr>
-                            
+                            `).join('')}
                         </tbody>
                     </table>
                 </div>
@@ -199,7 +269,7 @@ Call log:
             data: {
                 labels: ['Pass', 'Fail', 'Skip'],
                 datasets: [{
-                    data: [0, 1, 0],
+                    data: [${passed}, ${failed}, ${skipped}],
                     backgroundColor: ['#10b981', '#f43f5e', '#f59e0b'],
                     borderWidth: 0
                 }]
@@ -222,8 +292,8 @@ Call log:
             const modal = document.getElementById('mediaModal');
             const body = document.getElementById('modalBody');
             body.innerHTML = type.includes('image') 
-                ? `<img src="${path}" class="modal-content">`
-                : `<video src="${path}" controls autoplay class="modal-content"></video>`;
+                ? \`<img src="\${path}" class="modal-content">\`
+                : \`<video src="\${path}" controls autoplay class="modal-content"></video>\`;
             modal.style.display = 'flex';
         }
 
@@ -234,3 +304,7 @@ Call log:
     </script>
 </body>
 </html>
+`;
+
+fs.writeFileSync(path.join(OUTPUT_DIR, 'index.html'), htmlContent);
+console.log('✅ Artistic Report Generated at reports/index.html');

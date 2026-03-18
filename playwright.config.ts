@@ -7,7 +7,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 1,   // 1 retry locally for flaky network tests
   workers: process.env.CI ? 1 : 4,    // 4 parallel workers locally
-  reporter: [['html'], ['list']],      // show live output + HTML report
+  reporter: [['html'], ['list'], ['json', { outputFile: 'test-results.json' }]],      // show live output + HTML report + JSON for automation
   use: {
     baseURL: 'https://parabank.parasoft.com',
     trace: 'on-first-retry',
