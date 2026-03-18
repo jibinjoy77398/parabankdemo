@@ -76,8 +76,10 @@ jobs:
           path: reports/
 
       - name: Send Email Report
-        if: always() && secrets.MAIL_RECIPIENT
+        if: always() && env.MAIL_TO != ''
         uses: dawidd6/action-send-mail@v4
+        env:
+          MAIL_TO: ${{ secrets.MAIL_RECIPIENT }}
         with:
           server_address: smtp.gmail.com
           server_port: 465
