@@ -66,7 +66,7 @@ function processSuite(suite) {
 
                 testDetails.push({
                     title: spec.title,
-                    module: path.basename(suite.file || 'Unknown'),
+                    module: path.basename(suite.file || 'Unknown').replace('.spec.ts', ''),
                     status: status,
                     duration: (result.duration / 1000).toFixed(2) + 's',
                     error: result.error ? result.error.message : null,
@@ -76,6 +76,15 @@ function processSuite(suite) {
         });
     }
 }
+
+// Group by Module
+const groupedModules = {};
+testDetails.forEach(test => {
+    if (!groupedModules[test.module]) {
+        groupedModules[test.module] = [];
+    }
+    groupedModules[test.module].push(test);
+});
 
 const durationSec = (durationMs / 1000).toFixed(1) + 's';
 const passRate = total > 0 ? Math.round((passed / total) * 100) : 0;
@@ -101,7 +110,7 @@ const htmlContent = `
             --warning: #f59e0b;
             --info: #3b82f6;
             --bg-gradient: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-bg: rgba(255, 255, 255, 0.75);
             --glass-border: rgba(255, 255, 255, 0.5);
             --text-main: #0f172a;
             --text-muted: #64748b;
@@ -109,11 +118,11 @@ const htmlContent = `
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
-        body { background: var(--bg-gradient); background-attachment: fixed; color: var(--text-main); min-height: 100vh; padding: 1.5rem; display: flex; justify-content: center; }
-        .dashboard { width: 100%; max-width: 1100px; display: flex; flex-direction: column; gap: 2rem; animation: fadeIn 0.8s ease-out; }
+        body { background: var(--bg-gradient); background-attachment: fixed; color: var(--text-main); min-height: 100vh; padding: 1.5rem; display: flex; justify-content: center; overflow-x: hidden; }
+        .dashboard { width: 100%; max-width: 1100px; display: flex; flex-direction: column; gap: 2rem; animation: fadeIn 0.8s ease-out; padding-bottom: 5rem; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .glass-card { background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 1.5rem; box-shadow: var(--shadow-lg); padding: 2rem; }
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 1.5rem; box-shadow: var(--shadow-lg); padding: 2rem; }
         
         header { display: flex; flex-direction: column; gap: 1rem; text-align: center; }
         @media (min-width: 768px) { header { flex-direction: row; justify-content: space-between; align-items: flex-end; text-align: left; } }
@@ -149,25 +158,41 @@ const htmlContent = `
         .info-box h4 { font-size: 0.9rem; font-weight: 700; }
         .info-box p { font-size: 0.8rem; color: var(--text-muted); }
 
-        .btn-toggle { width: 100%; padding: 1rem; background: var(--primary); color: white; border: none; border-radius: 1rem; font-weight: 600; cursor: pointer; margin-top: 1rem; }
-        .details-wrapper { overflow: hidden; max-height: 0; transition: max-height 0.5s ease-in-out; }
-        .details-wrapper.open { max-height: 5000px; }
-        .table-container { width: 100%; overflow-x: auto; margin-top: 1rem; border-radius: 1rem; border: 1px solid var(--glass-border); }
-        table { width: 100%; border-collapse: collapse; background: rgba(255, 255, 255, 0.2); }
-        th { background: rgba(255, 255, 255, 0.5); padding: 1rem; text-align: left; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); }
-        td { padding: 1rem; font-size: 0.85rem; border-bottom: 1px solid var(--glass-border); vertical-align: top; }
-        .badge { padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
-        .badge.pass { background: #d1fae5; color: var(--success); }
-        .badge.fail { background: #fee2e2; color: var(--danger); }
-        .badge.skip { background: #fef3c7; color: var(--warning); }
+        .btn-toggle { width: 100%; padding: 1rem; background: var(--primary); color: white; border: none; border-radius: 1rem; font-weight: 600; cursor: pointer; margin-top: 1rem; box-shadow: var(--shadow-lg); transition: background 0.2s; }
+        .btn-toggle:hover { background: var(--primary-light); }
+        
+        .details-wrapper { display: none; margin-top: 1rem; }
+        .details-wrapper.open { display: block; }
+        
+        .module-section { margin-top: 2rem; }
+        .module-header { font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+        .module-header::before { content: ''; display: inline-block; width: 4px; height: 18px; background: var(--primary); border-radius: 2px; }
+
+        .table-container { width: 100%; overflow-x: auto; border-radius: 1rem; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.1); margin-bottom: 1.5rem; }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th { background: rgba(255, 255, 255, 0.4); padding: 1rem; text-align: left; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--glass-border); }
+        td { padding: 1rem; font-size: 0.85rem; border-bottom: 1px solid var(--glass-border); vertical-align: top; background: rgba(255, 255, 255, 0.05); }
+        tr:last-child td { border-bottom: none; }
+        
+        .badge { padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; display: inline-block; }
+        .badge.passed { background: #d1fae5; color: var(--success); }
+        .badge.failed { background: #fee2e2; color: var(--danger); }
+        .badge.skipped { background: #fef3c7; color: var(--warning); }
 
         .media-container { display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap; }
-        .media-item { cursor: pointer; border-radius: 0.5rem; border: 1px solid var(--glass-border); padding: 0.2rem; background: white; font-size: 0.7rem; display: flex; align-items: center; gap: 0.3rem; }
+        .media-item { cursor: pointer; border-radius: 0.5rem; border: 1px solid var(--glass-border); padding: 0.3rem 0.6rem; background: white; font-size: 0.75rem; display: flex; align-items: center; gap: 0.4rem; transition: background 0.2s; }
         .media-item:hover { background: #f1f5f9; }
         
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; }
-        .modal-content { max-width: 90%; max-height: 90%; border-radius: 1rem; }
-        .close-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(4px); justify-content: center; align-items: center; padding: 1rem; }
+        .modal-content { max-width: 100%; max-height: 85vh; border-radius: 1rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.1); }
+        .close-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; opacity: 0.7; transition: opacity 0.2s; }
+        .close-modal:hover { opacity: 1; }
+        
+        @media (max-width: 600px) {
+            .metric-value { font-size: 1.4rem; }
+            .brand h1 { font-size: 2rem; }
+            .glass-card { padding: 1.25rem; }
+        }
     </style>
 </head>
 <body>
@@ -175,10 +200,10 @@ const htmlContent = `
         <header class="glass-card">
             <div class="brand">
                 <h1>ParaBank Intelligence</h1>
-                <p>Dynamic Test Automation Insights</p>
+                <p>Categorized Test Automation Insights</p>
             </div>
             <div class="meta">
-                <h2>Execution Link</h2>
+                <h2>Execution Data</h2>
                 <p id="timestamp">${new Date().toLocaleString()}</p>
             </div>
         </header>
@@ -200,17 +225,17 @@ const htmlContent = `
             </div>
 
             <div class="glass-card content-box">
-                <h3>🔍 Run Highlights</h3>
+                <h3>🔍 Execution Summary</h3>
                 <div class="highlights">
                     ${failed > 0 ? `
                         <div class="highlight-card">
                             <div class="icon-box danger">⚠️</div>
-                            <div class="info-box"><h4>Action Required</h4><p>${failed} test failures detected. Check detailed analysis for screenshots and videos.</p></div>
+                            <div class="info-box"><h4>Critical Defects</h4><p>${failed} test failures detected. Check module-wise details below.</p></div>
                         </div>
                     ` : `
                         <div class="highlight-card">
                             <div class="icon-box success">✨</div>
-                            <div class="info-box"><h4>All Systems Go</h4><p>Suite executed perfectly with 100% functional integrity.</p></div>
+                            <div class="info-box"><h4>High Integrity Run</h4><p>All test modules passed within expected performance thresholds.</p></div>
                         </div>
                     `}
                 </div>
@@ -218,41 +243,44 @@ const htmlContent = `
         </div>
 
         <div>
-            <button class="btn-toggle" onclick="toggleDetails()" id="toggleBtn">View Detailed Analysis</button>
+            <button class="btn-toggle" onclick="toggleDetails()" id="toggleBtn">View Module Detailed Analysis</button>
             <div class="details-wrapper" id="detailsWrapper">
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Test Spec</th>
-                                <th>Module</th>
-                                <th>Result / Media</th>
-                                <th>Duration</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${testDetails.map(test => `
-                                <tr>
-                                    <td><strong>${test.title}</strong>${test.error ? `<br><small style="color:var(--danger)">${test.error}</small>` : ''}</td>
-                                    <td>${test.module}</td>
-                                    <td>
-                                        <span class="badge ${test.status}">${test.status}</span>
-                                        ${test.attachments.length > 0 ? `
-                                            <div class="media-container">
-                                                ${test.attachments.map(att => `
-                                                    <div class="media-item" onclick="openMedia('${att.path}', '${att.contentType}')">
-                                                        ${att.contentType.includes('image') ? '🖼️' : '🎥'} ${att.name || 'Attachment'}
+                ${Object.keys(groupedModules).map(moduleName => `
+                    <div class="module-section">
+                        <div class="module-header">${moduleName}</div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th style="width: 45%;">Test Spec</th>
+                                        <th style="width: 35%;">Result / Media</th>
+                                        <th style="width: 20%;">Duration</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${groupedModules[moduleName].map(test => `
+                                        <tr>
+                                            <td><strong>${test.title}</strong>${test.error ? `<br><small style="color:var(--danger); display:block; margin-top:4px;">${test.error.split('\n')[0]}</small>` : ''}</td>
+                                            <td>
+                                                <span class="badge ${test.status}">${test.status}</span>
+                                                ${test.attachments.length > 0 ? `
+                                                    <div class="media-container">
+                                                        ${test.attachments.map(att => `
+                                                            <div class="media-item" onclick="openMedia('${att.path}', '${att.contentType}')">
+                                                                ${att.contentType.includes('image') ? '🖼️' : '🎥'} ${att.name || (att.contentType.includes('image') ? 'Screenshot' : 'Video')}
+                                                            </div>
+                                                        `).join('')}
                                                     </div>
-                                                `).join('')}
-                                            </div>
-                                        ` : ''}
-                                    </td>
-                                    <td>${test.duration}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
+                                                ` : ''}
+                                            </td>
+                                            <td>${test.duration}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `).join('')}
             </div>
         </div>
     </div>
@@ -271,11 +299,13 @@ const htmlContent = `
                 datasets: [{
                     data: [${passed}, ${failed}, ${skipped}],
                     backgroundColor: ['#10b981', '#f43f5e', '#f59e0b'],
-                    borderWidth: 0
+                    borderWidth: 0,
+                    hoverOffset: 12
                 }]
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: true,
                 cutout: '82%',
                 plugins: { legend: { display: false } }
             }
@@ -285,7 +315,12 @@ const htmlContent = `
             const wrapper = document.getElementById('detailsWrapper');
             const btn = document.getElementById('toggleBtn');
             const isOpen = wrapper.classList.toggle('open');
-            btn.textContent = isOpen ? 'Hide Detailed Analysis' : 'View Detailed Analysis';
+            btn.textContent = isOpen ? 'Hide Module Detailed Analysis' : 'View Module Detailed Analysis';
+            
+            // Fix for scrolling: scroll to the revealed section
+            if(isOpen) {
+               window.scrollTo({ top: btn.offsetTop - 20, behavior: 'smooth' });
+            }
         }
 
         function openMedia(path, type) {
@@ -295,11 +330,13 @@ const htmlContent = `
                 ? \`<img src="\${path}" class="modal-content">\`
                 : \`<video src="\${path}" controls autoplay class="modal-content"></video>\`;
             modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Stop background scroll
         }
 
         function closeMedia() {
             document.getElementById('mediaModal').style.display = 'none';
             document.getElementById('modalBody').innerHTML = '';
+            document.body.style.overflow = ''; // Resume background scroll
         }
     </script>
 </body>
@@ -307,4 +344,4 @@ const htmlContent = `
 `;
 
 fs.writeFileSync(path.join(OUTPUT_DIR, 'index.html'), htmlContent);
-console.log('✅ Artistic Report Generated at reports/index.html');
+console.log('✅ artistic Report Generated at reports/index.html');
