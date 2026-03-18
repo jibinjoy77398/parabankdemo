@@ -81,9 +81,17 @@ function processSuite(suite) {
 const groupedModules = {};
 testDetails.forEach(test => {
     if (!groupedModules[test.module]) {
-        groupedModules[test.module] = [];
+        groupedModules[test.module] = {
+            tests: [],
+            passed: 0,
+            failed: 0,
+            skipped: 0
+        };
     }
-    groupedModules[test.module].push(test);
+    groupedModules[test.module].tests.push(test);
+    if (test.status === 'passed') groupedModules[test.module].passed++;
+    else if (test.status === 'failed' || test.status === 'timedOut') groupedModules[test.module].failed++;
+    else groupedModules[test.module].skipped++;
 });
 
 const durationSec = (durationMs / 1000).toFixed(1) + 's';
@@ -164,14 +172,35 @@ const htmlContent = `
         .details-wrapper { display: none; margin-top: 1rem; }
         .details-wrapper.open { display: block; }
         
-        .module-section { margin-top: 2rem; }
-        .module-header { font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
-        .module-header::before { content: ''; display: inline-block; width: 4px; height: 18px; background: var(--primary); border-radius: 2px; }
+        .module-section { margin-top: 1rem; border-radius: 1rem; overflow: hidden; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.2); }
+        .module-header { 
+            padding: 1.25rem; 
+            background: rgba(255, 255, 255, 0.4); 
+            cursor: pointer; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            transition: background 0.2s;
+            user-select: none;
+        }
+        .module-header:hover { background: rgba(255, 255, 255, 0.6); }
+        .module-title { font-size: 1.1rem; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 0.75rem; }
+        .module-title::before { content: ''; display: inline-block; width: 4px; height: 18px; background: var(--primary); border-radius: 2px; }
+        
+        .module-stats { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); display: flex; gap: 1rem; align-items: center; }
+        .stat-badge { padding: 0.15rem 0.5rem; border-radius: 0.5rem; }
+        .stat-badge.p { background: #d1fae5; color: var(--success); }
+        .stat-badge.f { background: #fee2e2; color: var(--danger); }
+        
+        .chevron { width: 20px; height: 20px; transition: transform 0.3s; opacity: 0.5; }
+        .module-section.expanded .chevron { transform: rotate(180deg); }
+        .module-content { display: none; padding: 1rem; background: rgba(255,255,255,0.05); }
+        .module-section.expanded .module-content { display: block; }
 
-        .table-container { width: 100%; overflow-x: auto; border-radius: 1rem; border: 1px solid var(--glass-border); background: rgba(255, 255, 255, 0.1); margin-bottom: 1.5rem; }
+        .table-container { width: 100%; overflow-x: auto; border-radius: 0.75rem; border: 1px solid var(--glass-border); background: white; }
         table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        th { background: rgba(255, 255, 255, 0.4); padding: 1rem; text-align: left; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--glass-border); }
-        td { padding: 1rem; font-size: 0.85rem; border-bottom: 1px solid var(--glass-border); vertical-align: top; background: rgba(255, 255, 255, 0.05); }
+        th { background: #f8fafc; padding: 0.75rem 1rem; text-align: left; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--glass-border); }
+        td { padding: 1rem; font-size: 0.85rem; border-bottom: 1px solid var(--glass-border); vertical-align: top; }
         tr:last-child td { border-bottom: none; }
         
         .badge { padding: 0.2rem 0.6rem; border-radius: 1rem; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; display: inline-block; }
@@ -192,6 +221,7 @@ const htmlContent = `
             .metric-value { font-size: 1.4rem; }
             .brand h1 { font-size: 2rem; }
             .glass-card { padding: 1.25rem; }
+            .module-stats { display: none; }
         }
     </style>
 </head>
@@ -200,10 +230,10 @@ const htmlContent = `
         <header class="glass-card">
             <div class="brand">
                 <h1>ParaBank Intelligence</h1>
-                <p>Categorized Test Automation Insights</p>
+                <p>Accordion-Style Test Execution Monitoring</p>
             </div>
             <div class="meta">
-                <h2>Execution Data</h2>
+                <h2>Generated</h2>
                 <p id="timestamp">${new Date().toLocaleString()}</p>
             </div>
         </header>
@@ -225,17 +255,17 @@ const htmlContent = `
             </div>
 
             <div class="glass-card content-box">
-                <h3>🔍 Execution Summary</h3>
+                <h3>🔍 Real-Time Summarization</h3>
                 <div class="highlights">
                     ${failed > 0 ? `
                         <div class="highlight-card">
                             <div class="icon-box danger">⚠️</div>
-                            <div class="info-box"><h4>Critical Defects</h4><p>${failed} test failures detected. Check module-wise details below.</p></div>
+                            <div class="info-box"><h4>Attention Needed</h4><p>${failed} failures across ${Object.keys(groupedModules).length} modules. Expand categories to investigate.</p></div>
                         </div>
                     ` : `
                         <div class="highlight-card">
                             <div class="icon-box success">✨</div>
-                            <div class="info-box"><h4>High Integrity Run</h4><p>All test modules passed within expected performance thresholds.</p></div>
+                            <div class="info-box"><h4>Optimal Health</h4><p>All test modules reported healthy states in the last execution cycle.</p></div>
                         </div>
                     `}
                 </div>
@@ -243,44 +273,58 @@ const htmlContent = `
         </div>
 
         <div>
-            <button class="btn-toggle" onclick="toggleDetails()" id="toggleBtn">View Module Detailed Analysis</button>
+            <button class="btn-toggle" onclick="toggleDetails()" id="toggleBtn">Explore Module Detailed Breakdown</button>
             <div class="details-wrapper" id="detailsWrapper">
-                ${Object.keys(groupedModules).map(moduleName => `
-                    <div class="module-section">
-                        <div class="module-header">${moduleName}</div>
-                        <div class="table-container">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th style="width: 45%;">Test Spec</th>
-                                        <th style="width: 35%;">Result / Media</th>
-                                        <th style="width: 20%;">Duration</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${groupedModules[moduleName].map(test => `
+                ${Object.keys(groupedModules).sort().map(moduleName => {
+                    const mod = groupedModules[moduleName];
+                    return `
+                    <div class="module-section" id="section-${moduleName}">
+                        <div class="module-header" onclick="toggleModule('${moduleName}')">
+                            <div class="module-title">${moduleName}</div>
+                            <div style="display: flex; align-items: center; gap: 1.5rem;">
+                                <div class="module-stats">
+                                    <span class="stat-badge p">P: ${mod.passed}</span>
+                                    <span class="stat-badge f">F: ${mod.failed}</span>
+                                    ${mod.skipped > 0 ? `<span class="stat-badge s">S: ${mod.skipped}</span>` : ''}
+                                </div>
+                                <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </div>
+                        </div>
+                        <div class="module-content">
+                            <div class="table-container">
+                                <table>
+                                    <thead>
                                         <tr>
-                                            <td><strong>${test.title}</strong>${test.error ? `<br><small style="color:var(--danger); display:block; margin-top:4px;">${test.error.split('\n')[0]}</small>` : ''}</td>
-                                            <td>
-                                                <span class="badge ${test.status}">${test.status}</span>
-                                                ${test.attachments.length > 0 ? `
-                                                    <div class="media-container">
-                                                        ${test.attachments.map(att => `
-                                                            <div class="media-item" onclick="openMedia('${att.path}', '${att.contentType}')">
-                                                                ${att.contentType.includes('image') ? '🖼️' : '🎥'} ${att.name || (att.contentType.includes('image') ? 'Screenshot' : 'Video')}
-                                                            </div>
-                                                        `).join('')}
-                                                    </div>
-                                                ` : ''}
-                                            </td>
-                                            <td>${test.duration}</td>
+                                            <th style="width: 45%;">Test Definition</th>
+                                            <th style="width: 35%;">Result & Attachments</th>
+                                            <th style="width: 20%;">Time</th>
                                         </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        ${mod.tests.map(test => `
+                                            <tr>
+                                                <td><strong>${test.title}</strong>${test.error ? `<br><small style="color:var(--danger); display:block; margin-top:4px; max-height: 60px; overflow: hidden;">${test.error.split('\n')[0]}</small>` : ''}</td>
+                                                <td>
+                                                    <span class="badge ${test.status}">${test.status}</span>
+                                                    ${test.attachments.length > 0 ? `
+                                                        <div class="media-container">
+                                                            ${test.attachments.map(att => `
+                                                                <div class="media-item" onclick="openMedia('${att.path}', '${att.contentType}')">
+                                                                    ${att.contentType.includes('image') ? '🖼️' : '🎥'} ${att.name || (att.contentType.includes('image') ? 'Screenshot' : 'Video')}
+                                                                </div>
+                                                            `).join('')}
+                                                        </div>
+                                                    ` : ''}
+                                                </td>
+                                                <td>${test.duration}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                `).join('')}
+                `}).join('')}
             </div>
         </div>
     </div>
@@ -315,12 +359,13 @@ const htmlContent = `
             const wrapper = document.getElementById('detailsWrapper');
             const btn = document.getElementById('toggleBtn');
             const isOpen = wrapper.classList.toggle('open');
-            btn.textContent = isOpen ? 'Hide Module Detailed Analysis' : 'View Module Detailed Analysis';
-            
-            // Fix for scrolling: scroll to the revealed section
-            if(isOpen) {
-               window.scrollTo({ top: btn.offsetTop - 20, behavior: 'smooth' });
-            }
+            btn.textContent = isOpen ? 'Collapse Detailed Breakdown' : 'Explore Module Detailed Breakdown';
+            if(isOpen) window.scrollTo({ top: btn.offsetTop - 20, behavior: 'smooth' });
+        }
+
+        function toggleModule(name) {
+            const section = document.getElementById('section-' + name);
+            section.classList.toggle('expanded');
         }
 
         function openMedia(path, type) {
@@ -330,13 +375,14 @@ const htmlContent = `
                 ? \`<img src="\${path}" class="modal-content">\`
                 : \`<video src="\${path}" controls autoplay class="modal-content"></video>\`;
             modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden'; // Stop background scroll
+            document.body.style.overflow = 'hidden';
         }
 
         function closeMedia() {
-            document.getElementById('mediaModal').style.display = 'none';
+            const modal = document.getElementById('mediaModal');
+            modal.style.display = 'none';
             document.getElementById('modalBody').innerHTML = '';
-            document.body.style.overflow = ''; // Resume background scroll
+            document.body.style.overflow = '';
         }
     </script>
 </body>
