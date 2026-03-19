@@ -10,6 +10,7 @@ export default defineConfig({
   reporter: [['html'], ['list'], ['json', { outputFile: 'test-results.json' }]],      // show live output + HTML report + JSON for automation
   use: {
     baseURL: 'https://parabank.parasoft.com',
+    storageState: 'state.json',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',

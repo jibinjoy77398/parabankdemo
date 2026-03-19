@@ -3,6 +3,8 @@ import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
 import testData from '../data/testData.json';
 
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe('Login', () => {
   test('LOG_001 - Successful login with valid credentials', async ({ page }) => {
     // globalSetup registers "steve" before tests run.

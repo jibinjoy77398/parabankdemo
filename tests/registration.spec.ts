@@ -2,6 +2,9 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
 import { RegisterPage } from '../pages/RegisterPage';
 import testData from '../data/testData.json';
+
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe('Registration', () => {
   test.describe.configure({ mode: 'serial' });
   test('REG_001 - Successful registration with all valid data', async ({ page }) => {

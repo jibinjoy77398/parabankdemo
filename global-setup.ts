@@ -13,7 +13,7 @@ async function globalSetup() {
   const page = await browser.newPage();
 
   try {
-    console.log(`\n[Global Setup] Registering user: ${username}`);
+    console.log(`\n[Global Setup] Authentication & State Preservation: ${username}`);
     await page.goto('https://parabank.parasoft.com/parabank/register.htm', { timeout: 30000 });
 
     const reg = testData.registrationDetails;
@@ -29,18 +29,30 @@ async function globalSetup() {
     await page.locator('[id="customer.password"]').fill(password);
     await page.locator('#repeatedPassword').fill(password);
     await page.getByRole('button', { name: 'Register' }).click();
-    await page.waitForTimeout(2000);
-
+    
+    // Wait for the welcome message or if user already exists error
+    await page.waitForLoadState('networkidle');
     const content = await page.content();
-    if (content.includes('created successfully') || content.includes('Welcome')) {
-      console.log(`[Global Setup] ✅ Registered: ${username}`);
-    } else if (content.includes('already in use') || content.includes('already exists')) {
-      console.log(`[Global Setup] ℹ️  User "${username}" already exists — skipping.`);
-    } else {
-      console.warn(`[Global Setup] ⚠️  Unexpected response — tests may use existing credentials.`);
+
+    if (content.includes('Your account was created successfully')) {
+      console.log(`[Global Setup] ✅ User "${username}" registered successfully.`);
+    } else if (content.includes('This username already exists')) {
+      console.log(`[Global Setup] ℹ️  User "${username}" already exists. Proceeding to Login.`);
+      // If user exists, we need to explicitly login to capture session
+      await page.goto('https://parabank.parasoft.com/parabank/index.htm');
+      await page.locator('input[name="username"]').fill(username);
+      await page.locator('input[name="password"]').fill(password);
+      await page.locator('input[value="Log In"]').click();
+      await page.waitForLoadState('networkidle');
     }
+
+    // Save storage state to a file
+    await page.context().storageState({ path: 'state.json' });
+    console.log(`[Global Setup] 💾 Storage state saved to "state.json"`);
+
   } catch (e) {
-    console.warn(`[Global Setup] ⚠️  Registration failed (${(e as Error).message}) — continuing with existing user.`);
+    console.error(`[Global Setup] ❌ Error establishing global state: ${(e as Error).message}`);
+    throw e;
   } finally {
     await browser.close();
   }
